@@ -17,6 +17,7 @@ from sentinel.config import get_settings
 SCHEMA = """
 CREATE TABLE suppliers (
     supplier_id TEXT PRIMARY KEY, name TEXT, country TEXT, region TEXT,
+    city TEXT, lat REAL, lon REAL,
     primary_port TEXT, tier_class TEXT, on_time_rate REAL,
     avg_lead_time_days INTEGER, annual_spend_musd REAL, geo_risk TEXT, iso9001 TEXT
 );

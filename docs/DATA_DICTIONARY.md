@@ -9,7 +9,8 @@ a global multi-tier supplier network. Regenerate with
 | Column | Meaning |
 |---|---|
 | supplier_id | `SUP-NNN` primary key |
-| name, country, region | identity; region ∈ APAC/EMEA/AMER |
+| name, country, region | identity; country derived from the plant city; region ∈ APAC/EMEA/AMER |
+| city, lat, lon | plant location — used by live-signal geo-matching and graph analytics |
 | primary_port | export port used by the supplier |
 | tier_class | strategic / preferred / approved |
 | on_time_rate | trailing on-time delivery rate (0–1) |
@@ -59,6 +60,11 @@ labor strike, port congestion, quality recall, price shock, customs delay,
 flood. Severity hints are *source* hints — the triage agent re-scores against
 actual network exposure (e.g. a "critical" event with zero footprint overlap
 is downgraded).
+
+## geo/locations.csv (12 rows)
+Port gazetteer (`kind, name, country, lat, lon`) used together with supplier
+coordinates as the geo-matching footprint for live connectors (USGS / NOAA /
+GDELT). Tests use committed connector fixtures under `tests/fixtures/`.
 
 ## policies/procurement_policy.yaml
 Governance consumed by the compliance agent and the approval gate:

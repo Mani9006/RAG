@@ -80,6 +80,58 @@ PRODUCTS = [
 PORTS = ["Kaohsiung", "Shanghai", "Hai Phong", "Port Klang", "Busan", "Hamburg",
          "Gdansk", "Long Beach", "Manzanillo", "Santos", "Chennai", "Laem Chabang"]
 
+PORT_COORDS = {
+    "Kaohsiung": ("Taiwan", 22.62, 120.31), "Shanghai": ("China", 31.23, 121.49),
+    "Hai Phong": ("Vietnam", 20.86, 106.68), "Port Klang": ("Malaysia", 3.00, 101.39),
+    "Busan": ("South Korea", 35.10, 129.04), "Hamburg": ("Germany", 53.55, 9.99),
+    "Gdansk": ("Poland", 54.35, 18.65), "Long Beach": ("United States", 33.77, -118.19),
+    "Manzanillo": ("Mexico", 19.05, -104.32), "Santos": ("Brazil", -23.96, -46.33),
+    "Chennai": ("India", 13.08, 80.27), "Laem Chabang": ("Thailand", 13.08, 100.88),
+}
+
+# Supplier-city coordinates; the city is the leading token(s) of the supplier name.
+CITY_COORDS = {
+    "Hsinchu": (24.80, 120.97), "Shenzhen": (22.54, 114.06), "Hanoi": (21.03, 105.85),
+    "Penang": (5.42, 100.33), "Osaka": (34.69, 135.50), "Busan": (35.18, 129.08),
+    "Dresden": (51.05, 13.74), "Krakow": (50.06, 19.94), "Brno": (49.20, 16.61),
+    "Austin": (30.27, -97.74), "Monterrey": (25.69, -100.32), "Curitiba": (-25.43, -49.27),
+    "Chennai": (13.08, 80.27), "Bangkok": (13.76, 100.50), "Taoyuan": (24.99, 121.30),
+    "Suzhou": (31.30, 120.59), "Da Nang": (16.05, 108.21), "Kulim": (5.37, 100.56),
+    "Nagoya": (35.18, 136.91), "Gumi": (36.12, 128.34), "Leipzig": (51.34, 12.37),
+    "Gdansk": (54.35, 18.65), "Ostrava": (49.82, 18.26), "Phoenix": (33.45, -112.07),
+    "Tijuana": (32.51, -117.04), "Sao Paulo": (-23.55, -46.63), "Pune": (18.52, 73.86),
+    "Rayong": (12.68, 101.28), "Kaohsiung": (22.62, 120.31), "Dongguan": (23.02, 113.75),
+    "Hai Phong": (20.86, 106.68), "Johor": (1.49, 103.74), "Kyoto": (35.01, 135.77),
+    "Daejeon": (36.35, 127.38), "Stuttgart": (48.78, 9.18), "Wroclaw": (51.11, 17.04),
+    "Plzen": (49.74, 13.38), "Raleigh": (35.78, -78.64), "Guadalajara": (20.66, -103.35),
+    "Recife": (-8.05, -34.88),
+}
+
+
+CITY_COUNTRY = {
+    "Hsinchu": "Taiwan", "Taoyuan": "Taiwan", "Kaohsiung": "Taiwan",
+    "Shenzhen": "China", "Suzhou": "China", "Dongguan": "China",
+    "Hanoi": "Vietnam", "Da Nang": "Vietnam", "Hai Phong": "Vietnam",
+    "Penang": "Malaysia", "Kulim": "Malaysia", "Johor": "Malaysia",
+    "Osaka": "Japan", "Nagoya": "Japan", "Kyoto": "Japan",
+    "Busan": "South Korea", "Gumi": "South Korea", "Daejeon": "South Korea",
+    "Dresden": "Germany", "Leipzig": "Germany", "Stuttgart": "Germany",
+    "Krakow": "Poland", "Gdansk": "Poland", "Wroclaw": "Poland",
+    "Brno": "Czechia", "Ostrava": "Czechia", "Plzen": "Czechia",
+    "Austin": "United States", "Phoenix": "United States", "Raleigh": "United States",
+    "Monterrey": "Mexico", "Tijuana": "Mexico", "Guadalajara": "Mexico",
+    "Curitiba": "Brazil", "Sao Paulo": "Brazil", "Recife": "Brazil",
+    "Chennai": "India", "Pune": "India",
+    "Bangkok": "Thailand", "Rayong": "Thailand",
+}
+
+
+def city_of(supplier_name: str) -> str:
+    for city in sorted(CITY_COORDS, key=len, reverse=True):
+        if supplier_name.startswith(city):
+            return city
+    raise ValueError(f"no city coordinates for supplier: {supplier_name}")
+
 
 def write_csv(path: Path, header: list[str], rows: list[list]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -91,15 +143,17 @@ def write_csv(path: Path, header: list[str], rows: list[list]) -> None:
 
 
 def main() -> None:
-    country_codes = list(REGIONS)
+    region_of = {country: region for country, region in REGIONS.values()}
 
     # --- suppliers -----------------------------------------------------------
     suppliers = []
     for i, name in enumerate(SUPPLIER_NAMES, start=1):
-        cc = country_codes[i % len(country_codes)]
-        country, region = REGIONS[cc]
+        city = city_of(name)
+        country = CITY_COUNTRY[city]
+        region = region_of[country]
+        lat, lon = CITY_COORDS[city]
         suppliers.append([
-            f"SUP-{i:03d}", name, country, region,
+            f"SUP-{i:03d}", name, country, region, city, lat, lon,
             rng.choice(PORTS),
             rng.choice(["strategic", "preferred", "approved"]),
             round(rng.uniform(0.82, 0.995), 3),          # on-time delivery rate
@@ -109,9 +163,15 @@ def main() -> None:
             "yes" if rng.random() > 0.12 else "no",       # iso9001 certified
         ])
     write_csv(DATA / "suppliers.csv",
-              ["supplier_id", "name", "country", "region", "primary_port", "tier_class",
+              ["supplier_id", "name", "country", "region", "city", "lat", "lon",
+               "primary_port", "tier_class",
                "on_time_rate", "avg_lead_time_days", "annual_spend_musd", "geo_risk", "iso9001"],
               suppliers)
+
+    # --- geo gazetteer (ports) used by live-signal geo-matching ----------------
+    write_csv(DATA / "geo" / "locations.csv",
+              ["kind", "name", "country", "lat", "lon"],
+              [["port", port, *PORT_COORDS[port]] for port in PORTS])
 
     # --- parts (each with primary + optional alternate supplier) -------------
     parts = []

@@ -53,6 +53,34 @@ def trigger_run(limit: int | None = None) -> dict:
         conn.close()
 
 
+@app.post("/ingest")
+def ingest(source: str = "all", window_hours: int = 24) -> dict:
+    from sentinel.connectors import CONNECTORS, run_ingest
+
+    if source != "all" and source not in CONNECTORS:
+        raise HTTPException(status_code=422, detail=f"unknown source: {source}")
+    conn = get_connection()
+    try:
+        return run_ingest(conn, source=source, window_hours=window_hours)
+    finally:
+        conn.close()
+
+
+@app.get("/network")
+def network_profile() -> dict:
+    from sentinel.graph import SupplyGraph
+
+    conn = get_connection()
+    try:
+        graph = SupplyGraph(conn)
+        return {
+            "single_points_of_failure": graph.single_points_of_failure(),
+            "critical_suppliers": graph.supplier_criticality(),
+        }
+    finally:
+        conn.close()
+
+
 @app.get("/signals")
 def list_signals() -> list[dict]:
     conn = get_connection()

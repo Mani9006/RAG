@@ -165,6 +165,21 @@ class ToolBox:
                 result["days_of_cover"] = round(inv["on_hand_units"] / inv["daily_consumption_units"], 1)
             return result
 
+        def network_risk_profile() -> dict:
+            """Structural risk view: top SPOFs + most critical suppliers."""
+            from sentinel.graph import SupplyGraph
+
+            graph = SupplyGraph(conn)
+            return {
+                "single_points_of_failure": graph.single_points_of_failure(top=10),
+                "critical_suppliers": graph.supplier_criticality(top=10),
+            }
+
+        def simulate_supplier_outage(supplier_id: str, outage_days: int) -> dict:
+            from sentinel.graph import SupplyGraph
+
+            return SupplyGraph(conn).simulate_outage(supplier_id, outage_days)
+
         def get_policy() -> dict:
             path = get_settings().data_dir / "policies" / "procurement_policy.yaml"
             return yaml.safe_load(path.read_text())
@@ -222,6 +237,22 @@ class ToolBox:
                  {"type": "object", "properties": {"part_id": {"type": "string"}},
                   "required": ["part_id"]},
                  inventory_position),
+            Tool("network_risk_profile",
+                 "Structural risk profile of the whole supply network: top single-points-of-"
+                 "failure (critical single-sourced parts ranked by revenue dependence) and the "
+                 "supplier criticality index. Call this to put one disruption in network context.",
+                 {"type": "object", "properties": {}, "required": []},
+                 network_risk_profile),
+            Tool("simulate_supplier_outage",
+                 "Simulate a supplier going completely dark for N days: per-part stockout "
+                 "timelines (days of cover vs relief via alternates) and per-product revenue "
+                 "loss with no double counting. Call this to quantify worst-case impact of a "
+                 "supplier-level disruption.",
+                 {"type": "object", "properties": {
+                     "supplier_id": {"type": "string"},
+                     "outage_days": {"type": "integer", "minimum": 1, "maximum": 180}},
+                  "required": ["supplier_id", "outage_days"]},
+                 simulate_supplier_outage),
             Tool("get_policy",
                  "Read the procurement governance policy: spend authority limits, sourcing rules, "
                  "and restricted entities. Compliance checks MUST be grounded in this document.",

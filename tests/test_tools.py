@@ -6,7 +6,7 @@ from sentinel.tools import ToolBox
 def test_registry_exposes_anthropic_schemas(conn):
     box = ToolBox(conn)
     schemas = box.schemas()
-    assert len(schemas) == 8
+    assert len(schemas) == 10
     for schema in schemas:
         assert set(schema) == {"name", "description", "input_schema"}
         assert schema["input_schema"]["type"] == "object"

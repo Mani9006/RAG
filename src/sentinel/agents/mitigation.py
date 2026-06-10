@@ -12,6 +12,7 @@ class MitigationAgent(Agent):
     name = "mitigation_planner"
     tools = [
         "find_alternate_sources", "estimate_expedite_cost", "inventory_position", "get_policy",
+        "simulate_supplier_outage",
     ]
     system = (
         "You are the Mitigation Planner agent for Vertex Devices. Given a quantified "

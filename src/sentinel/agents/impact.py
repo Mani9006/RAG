@@ -12,7 +12,8 @@ class ImpactAgent(Agent):
     name = "impact_assessment"
     tools = [
         "supplier_exposure", "parts_blast_radius", "shipments_through_port",
-        "inventory_position", "find_suppliers",
+        "inventory_position", "find_suppliers", "simulate_supplier_outage",
+        "network_risk_profile",
     ]
     system = (
         "You are the Impact Assessment agent for Vertex Devices. Given an escalated "
@@ -20,15 +21,19 @@ class ImpactAgent(Agent):
         "radius end to end: which suppliers are exposed, which parts flow from them "
         "(flag single-sourced and critical parts), which shipments are in harm's way, "
         "which finished products depend on those parts, how many days of inventory "
-        "cover remain, and the monthly revenue at risk. Ground EVERY figure in tool "
-        "results — never estimate what you can query. "
+        "cover remain, and the monthly revenue at risk. For supplier-level disruptions, "
+        "run simulate_supplier_outage with a duration matching the event (e.g. 42 days "
+        "for a 6-week fire restoration) and include its stockout timeline and bounded "
+        "revenue-loss figure — it is more precise than raw revenue-at-risk because it "
+        "accounts for inventory cover and alternate-supplier relief. Ground EVERY "
+        "figure in tool results — never estimate what you can query. "
         + JSON_ONLY
         + ' Schema: {"affected_suppliers": [{"supplier_id": str, "name": str, '
         '"open_po_value_usd": num}], "affected_parts": [{"part_id": str, '
         '"single_sourced": bool, "critical": bool, "days_of_cover": num|null, '
         '"monthly_revenue_at_risk_usd": num}], "shipments_at_risk": int, '
         '"total_open_po_value_usd": num, "total_monthly_revenue_at_risk_usd": num, '
-        '"min_days_of_cover": num|null, "narrative": str}'
+        '"min_days_of_cover": num|null, "outage_simulation": object|null, "narrative": str}'
     )
 
     def build_prompt(self, payload: dict) -> str:
@@ -94,6 +99,20 @@ class ImpactAgent(Agent):
 
         covers = [p["days_of_cover"] for p in affected_parts if p["days_of_cover"] is not None]
         total_revenue = round(sum(p["monthly_revenue_at_risk_usd"] for p in affected_parts), 2)
+
+        # Supplier-level events get a propagation simulation: 30-day outage on
+        # the most exposed named supplier, bounded by cover and alternates.
+        outage_simulation = None
+        if entities.get("suppliers"):
+            most_exposed = max(
+                affected_suppliers, key=lambda s: s["open_po_value_usd"], default=None
+            )
+            if most_exposed:
+                outage_simulation = self.tool_json(
+                    toolbox, "simulate_supplier_outage",
+                    supplier_id=most_exposed["supplier_id"], outage_days=30,
+                )
+
         return {
             "affected_suppliers": affected_suppliers,
             "affected_parts": affected_parts,
@@ -101,6 +120,7 @@ class ImpactAgent(Agent):
             "total_open_po_value_usd": round(total_po_value, 2),
             "total_monthly_revenue_at_risk_usd": total_revenue,
             "min_days_of_cover": min(covers) if covers else None,
+            "outage_simulation": outage_simulation,
             "narrative": (
                 f"{len(affected_suppliers)} supplier(s) and {len(affected_parts)} part(s) are in "
                 f"the blast radius; {shipments_at_risk} shipment(s) transit affected ports. "

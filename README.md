@@ -39,10 +39,21 @@ signal inbox ──▶ Risk Triage ──▶ Impact Assessment ──▶ Mitigat
   (`claude-opus-4-8`, adaptive thinking) with run-level token budgets and cost
   telemetry.
 - **Everything in the repo.** A seeded synthetic enterprise dataset (40
-  suppliers, 120 parts, BOM for 12 products, 220 shipments, 160 POs, a
-  governance policy, and a 12-event disruption feed) bootstraps into SQLite on
-  demand. No cloud services, no credentials, clean seams for swapping in real
-  warehouses and event feeds.
+  geo-located suppliers, 120 parts, BOM for 12 products, 220 shipments, 160
+  POs, a governance policy, and a 12-event disruption feed) bootstraps into
+  SQLite on demand. No cloud services, no credentials, clean seams for
+  swapping in real warehouses and event feeds.
+- **Watches the real world for free.** Live connectors for the same primary
+  sources commercial risk platforms resell at six figures — USGS earthquakes,
+  NOAA severe-weather alerts, GDELT global news — normalize raw events,
+  **geo-match them against your actual supplier/port footprint** (haversine
+  against the network), and dedupe into the same signal inbox. The pipeline
+  downstream is identical for live and replayed events.
+- **Network science, not just lists.** A supplier→part→product graph engine
+  detects single points of failure, ranks suppliers by a composite criticality
+  index, and simulates outage propagation (stockout timelines + revenue loss
+  bounded per product, alternate-supplier relief modeled) — exposed to the
+  agents as tools and to operators via `sentinel network`.
 
 ## Quickstart (60 seconds, no API key)
 
@@ -59,6 +70,8 @@ sentinel incidents                      # opened incidents with severity + risk 
 sentinel brief INC-XXXXXXXX             # executive situation report (markdown)
 sentinel approvals                      # actions waiting for a human
 sentinel decide ACT-XXXXXXXX --approve --approver alice@vertex.example
+sentinel network                        # SPOFs + supplier criticality index
+sentinel ingest --source usgs           # pull real-world signals (USGS/NOAA/GDELT)
 ```
 
 Or run the control-plane API:
@@ -93,6 +106,8 @@ estimated-cost telemetry in every run summary.
 
 Full details: [docs/AGENTS.md](docs/AGENTS.md) ·
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) ·
+[docs/RESEARCH.md](docs/RESEARCH.md) ·
+[docs/ROADMAP.md](docs/ROADMAP.md) ·
 [docs/RUNBOOK.md](docs/RUNBOOK.md) ·
 [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md)
 

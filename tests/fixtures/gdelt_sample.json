@@ -1,0 +1,28 @@
+{
+  "articles": [
+    {
+      "url": "https://example-news.example/gdansk-pcb-strike",
+      "title": "Workers strike at Gdansk PCB House plant enters second week",
+      "seendate": "20260609T143000Z",
+      "domain": "example-news.example",
+      "language": "English",
+      "sourcecountry": "Poland"
+    },
+    {
+      "url": "https://wire-service.example/penang-fire",
+      "title": "Massive fire disrupts semiconductor packaging factory in Penang industrial zone",
+      "seendate": "20260609T101500Z",
+      "domain": "wire-service.example",
+      "language": "English",
+      "sourcecountry": "Malaysia"
+    },
+    {
+      "url": "https://lifestyle.example/bakery-award",
+      "title": "Local bakery wins national award for sourdough",
+      "seendate": "20260609T090000Z",
+      "domain": "lifestyle.example",
+      "language": "English",
+      "sourcecountry": "United States"
+    }
+  ]
+}

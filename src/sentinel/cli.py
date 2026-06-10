@@ -83,6 +83,34 @@ def cmd_decide(args) -> None:
     print(json.dumps(result, indent=2))
 
 
+def cmd_ingest(args) -> None:
+    from sentinel.connectors import CONNECTORS, run_ingest
+
+    if args.source != "all" and args.source not in CONNECTORS:
+        print(f"unknown source: {args.source} (choose from {', '.join(CONNECTORS)}, all)",
+              file=sys.stderr)
+        sys.exit(2)
+    conn = get_connection()
+    print(json.dumps(run_ingest(conn, source=args.source, window_hours=args.window_hours),
+                     indent=2))
+
+
+def cmd_network(_args) -> None:
+    from sentinel.graph import SupplyGraph
+
+    conn = get_connection()
+    graph = SupplyGraph(conn)
+    print("=== SINGLE POINTS OF FAILURE (critical, single-sourced) ===")
+    _print_table(graph.single_points_of_failure(),
+                 ["part_id", "category", "supplier_name", "supplier_country",
+                  "monthly_revenue_dependent_usd", "days_of_cover"])
+    print("\n=== SUPPLIER CRITICALITY INDEX ===")
+    _print_table(graph.supplier_criticality(),
+                 ["supplier_id", "name", "country", "criticality_score",
+                  "monthly_revenue_dependent_usd", "single_sourced_parts",
+                  "single_points_of_failure"])
+
+
 def cmd_reset(_args) -> None:
     settings = get_settings()
     if settings.db_path.exists():
@@ -124,6 +152,14 @@ def main(argv: list[str] | None = None) -> None:
     group.add_argument("--reject", action="store_false", dest="approve")
     p.add_argument("--approver", required=True)
     p.set_defaults(fn=cmd_decide)
+
+    p = sub.add_parser("ingest", help="pull live disruption signals (USGS, NOAA, GDELT)")
+    p.add_argument("--source", default="all", help="usgs | noaa | gdelt | all")
+    p.add_argument("--window-hours", type=int, default=24)
+    p.set_defaults(fn=cmd_ingest)
+
+    sub.add_parser("network", help="supply network risk profile (SPOFs, criticality)"
+                   ).set_defaults(fn=cmd_network)
 
     sub.add_parser("reset", help="rebuild the local store from data/").set_defaults(fn=cmd_reset)
     sub.add_parser("serve", help="start the control-plane API").set_defaults(fn=cmd_serve)
