@@ -59,19 +59,25 @@ From point estimates to distributions.
 quantile ordering, stochastic dominance, and paired-ranking properties;
 briefings show uncertainty bands.
 
-## Phase 4 — Agent evaluation harness & quality gates
+## ✅ Phase 4 — Agent evaluation harness & quality gates (shipped)
 
 The credibility phase: prove the agents are good, continuously.
 
-- Golden dataset of signals with expert-labeled expected outcomes
-  (severity, escalation decision, key impact figures).
-- Eval runner scoring triage calibration (precision/recall on escalation),
-  impact accuracy (figures vs. ground truth), compliance correctness
-  (verdict + citation accuracy) — runs in CI against the simulation backend
-  and on-demand against live Claude.
-- Regression gates: a prompt change that degrades eval scores fails CI.
+- Golden datasets committed under `data/evals/`: 10 labeled triage cases
+  (escalation ground truth, severity bands, score calibration, entity
+  resolution) and 6 labeled compliance cases (verdicts + required rule
+  citations) using `@selector` placeholders resolved against the live dataset
+  so cases survive dataset regeneration.
+- Eval runner (`sentinel/evals.py`) scoring escalation precision/recall
+  (recall floor = 1.0 — a missed disaster is the unforgivable failure),
+  expectation pass rate, compliance verdict accuracy (floor = 1.0 — the money
+  gate must be exact) and citation accuracy. Runs against the simulation
+  backend in CI and against live Claude with one env var.
+- Hard regression gates: `sentinel eval` (and the CI job) exits non-zero when
+  any metric drops below its floor.
 
-**Acceptance:** `make eval` produces a scorecard; CI blocks on score drops.
+**Acceptance (met):** `make eval` produces a scorecard; CI blocks on score
+drops; a deliberately degraded agent fails the gates in the test suite.
 
 ## Phase 5 — Command center UI & notification fabric
 

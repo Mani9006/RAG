@@ -1,4 +1,4 @@
-.PHONY: install test lint demo reset serve docker data
+.PHONY: install test lint demo eval reset serve docker data
 
 install:        ## install package + dev tooling
 	pip install -e ".[dev]"
@@ -15,6 +15,9 @@ demo: reset     ## run the full pipeline offline (zero cost) and show results
 	sentinel incidents
 	@echo "\n=== APPROVAL QUEUE ==="
 	sentinel approvals
+
+eval:           ## run the agent evaluation harness (fails on gate regression)
+	sentinel eval
 
 reset:          ## rebuild the local store from the repo dataset
 	sentinel reset

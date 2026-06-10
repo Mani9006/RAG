@@ -60,6 +60,10 @@ signal inbox ──▶ Risk Triage ──▶ Impact Assessment ──▶ Mitigat
   loss and exceedance probabilities; incident briefings carry uncertainty
   bands; mitigation options are re-ranked by **expected loss reduction per
   dollar** using paired trials.
+- **Agents with proof of quality.** Golden datasets + an eval harness score
+  escalation precision/recall, severity calibration, and compliance verdict
+  accuracy on every CI run, with hard regression gates — a prompt change that
+  makes the agents worse fails the build (`make eval`).
 
 ## Quickstart (60 seconds, no API key)
 
@@ -80,6 +84,7 @@ sentinel network                        # SPOFs + supplier criticality index
 sentinel ingest --source usgs           # pull real-world signals (USGS/NOAA/GDELT)
 sentinel scenarios                      # list the what-if scenario library
 sentinel simulate --scenario taiwan-strait   # Monte Carlo loss distribution
+sentinel eval                           # agent quality scorecard + regression gates
 ```
 
 Or run the control-plane API:

@@ -72,6 +72,14 @@ supplier selection (`suppliers` / `countries` / `ports` — union applies) and
 triangular distributions for `outage_days`, `alt_lead_multiplier`, and
 `demand_multiplier`. Run via `sentinel simulate --scenario <name>`.
 
+## evals/*.jsonl (golden datasets)
+Labeled cases for the agent evaluation harness: `triage_golden.jsonl`
+(escalation ground truth, severity bands, score calibration, entity
+resolution) and `compliance_golden.jsonl` (expected verdicts + required rule
+citations). Supplier/part references use `@selector` placeholders
+(`@name:…`, `@iso9001:yes`, `@cover_lt:18`) resolved against the live dataset
+at eval time. Run via `sentinel eval`.
+
 ## policies/procurement_policy.yaml
 Governance consumed by the compliance agent and the approval gate:
 spend-authority tiers, sourcing rules SR-001…SR-004, restricted entities,

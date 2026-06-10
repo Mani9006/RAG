@@ -45,3 +45,7 @@ jobs:
           sentinel run
           sentinel incidents
           sentinel approvals
+      - name: Agent evaluation gates (offline)
+        run: |
+          sentinel reset
+          sentinel eval

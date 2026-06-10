@@ -134,6 +134,17 @@ def cmd_simulate(args) -> None:
     print(json.dumps(engine.run_scenario(spec, trials=args.trials), indent=2))
 
 
+def cmd_eval(_args) -> None:
+    from sentinel.evals import run_all
+
+    conn = get_connection()
+    scorecard = run_all(conn)
+    print(json.dumps(scorecard, indent=2))
+    if not scorecard["passed"]:
+        print("EVAL GATES FAILED", file=sys.stderr)
+        sys.exit(1)
+
+
 def cmd_reset(_args) -> None:
     settings = get_settings()
     if settings.db_path.exists():
@@ -192,6 +203,9 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--trials", type=int, default=2000)
     p.add_argument("--seed", type=int, default=90061)
     p.set_defaults(fn=cmd_simulate)
+
+    sub.add_parser("eval", help="run the agent evaluation harness with regression gates"
+                   ).set_defaults(fn=cmd_eval)
 
     sub.add_parser("reset", help="rebuild the local store from data/").set_defaults(fn=cmd_reset)
     sub.add_parser("serve", help="start the control-plane API").set_defaults(fn=cmd_serve)
