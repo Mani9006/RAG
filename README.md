@@ -64,6 +64,10 @@ signal inbox ──▶ Risk Triage ──▶ Impact Assessment ──▶ Mitigat
   escalation precision/recall, severity calibration, and compliance verdict
   accuracy on every CI run, with hard regression gates — a prompt change that
   makes the agents worse fails the build (`make eval`).
+- **Runs continuously and learns.** `sentinel daemon` loops ingest → pipeline
+  with crash-safe SQLite state; approver decisions become agreement metrics
+  (the earliest drift signal); and incident history feeds back into triage as
+  institutional memory — repeat offenders score higher.
 
 ## Quickstart (60 seconds, no API key)
 
@@ -85,6 +89,8 @@ sentinel ingest --source usgs           # pull real-world signals (USGS/NOAA/GDE
 sentinel scenarios                      # list the what-if scenario library
 sentinel simulate --scenario taiwan-strait   # Monte Carlo loss distribution
 sentinel eval                           # agent quality scorecard + regression gates
+sentinel daemon --interval 900          # continuous ingest + pipeline loop
+sentinel agreement                      # human-vs-agent agreement metrics
 ```
 
 Or run the **command center** (dashboard + API):

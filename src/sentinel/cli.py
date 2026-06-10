@@ -134,6 +134,27 @@ def cmd_simulate(args) -> None:
     print(json.dumps(engine.run_scenario(spec, trials=args.trials), indent=2))
 
 
+def cmd_daemon(args) -> None:
+    from sentinel.ops import run_daemon
+
+    conn = get_connection()
+    sources = None if args.no_ingest else args.sources
+    cycles = run_daemon(
+        conn,
+        interval_seconds=args.interval,
+        max_cycles=args.max_cycles,
+        ingest_sources=sources,
+    )
+    print(json.dumps({"cycles_completed": cycles}))
+
+
+def cmd_agreement(_args) -> None:
+    from sentinel.ops import agreement_metrics
+
+    conn = get_connection()
+    print(json.dumps(agreement_metrics(conn), indent=2))
+
+
 def cmd_eval(_args) -> None:
     from sentinel.evals import run_all
 
@@ -203,6 +224,16 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--trials", type=int, default=2000)
     p.add_argument("--seed", type=int, default=90061)
     p.set_defaults(fn=cmd_simulate)
+
+    p = sub.add_parser("daemon", help="continuous ingest+pipeline loop (state in SQLite)")
+    p.add_argument("--interval", type=float, default=900.0, help="seconds between cycles")
+    p.add_argument("--max-cycles", type=int, default=None, help="stop after N cycles")
+    p.add_argument("--sources", default="all", help="usgs | noaa | gdelt | all")
+    p.add_argument("--no-ingest", action="store_true", help="pipeline only, skip live feeds")
+    p.set_defaults(fn=cmd_daemon)
+
+    sub.add_parser("agreement", help="human-vs-agent agreement metrics"
+                   ).set_defaults(fn=cmd_agreement)
 
     sub.add_parser("eval", help="run the agent evaluation harness with regression gates"
                    ).set_defaults(fn=cmd_eval)

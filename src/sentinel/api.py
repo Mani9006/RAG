@@ -175,6 +175,17 @@ def decide(action_id: str, body: DecisionRequest) -> dict:
         conn.close()
 
 
+@app.get("/ops/agreement")
+def ops_agreement() -> dict:
+    from sentinel.ops import agreement_metrics
+
+    conn = get_connection()
+    try:
+        return agreement_metrics(conn)
+    finally:
+        conn.close()
+
+
 @app.get("/audit")
 def audit_trail(run_id: str | None = None, limit: int = 200) -> list[dict]:
     conn = get_connection()

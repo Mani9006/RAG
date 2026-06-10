@@ -35,7 +35,15 @@ class TriageAgent(Agent):
     )
 
     def build_prompt(self, payload: dict) -> str:
-        return "Triage this disruption signal:\n\n" + json.dumps(payload["signal"], indent=2)
+        prompt = "Triage this disruption signal:\n\n" + json.dumps(payload["signal"], indent=2)
+        precedent = payload.get("precedent")
+        if precedent:
+            prompt += (
+                "\n\nInstitutional memory (prior incidents from our records — repeat "
+                "offenders and recurring event types warrant a higher score):\n"
+                + json.dumps(precedent, indent=2)
+            )
+        return prompt
 
     def simulate(self, payload: dict, toolbox: ToolBox) -> dict:
         signal = payload["signal"]
@@ -65,6 +73,22 @@ class TriageAgent(Agent):
         if not supplier_ids and not countries and not ports:
             score = min(score, 0.35)
 
+        # Institutional memory: repeat offenders and recurring event types
+        # warrant a modest bump — but never enough to escalate pure noise.
+        precedent = payload.get("precedent") or {}
+        precedent_hits = (
+            precedent.get("prior_incidents_same_type", 0)
+            + sum(h["prior_incidents"]
+                  for h in precedent.get("prior_incidents_same_suppliers", []))
+        )
+        precedent_note = ""
+        if precedent_hits and score > 0.35:
+            score = round(min(score + 0.05, 1.0), 3)
+            precedent_note = (
+                f" Institutional memory: {precedent_hits} related prior incident(s) "
+                "on record — score raised."
+            )
+
         severity = (
             "critical" if score >= 0.8 else
             "high" if score >= 0.6 else
@@ -78,6 +102,7 @@ class TriageAgent(Agent):
                 f"{signal['type']} signal with {signal['severity_hint']} source hint; "
                 f"{len(supplier_ids)} known supplier(s), {len(ports)} active port(s) and "
                 f"{len(countries)} sourcing countr(ies) in our network are implicated."
+                + precedent_note
             ),
             "entities": {"suppliers": supplier_ids, "ports": ports, "countries": countries},
             "decision": decision,

@@ -98,16 +98,24 @@ smoke tests assert it is served, self-contained, and wired to the live API;
 notifier tests cover the severity floor, payload shape, failure isolation,
 and the audit trail.
 
-## Phase 6 — Continuous operations & learning loop
+## ✅ Phase 6 — Continuous operations & learning loop (shipped)
 
-- Scheduler for periodic ingest+run cycles (`sentinel daemon`).
-- Outcome feedback: approvers' decisions recorded as labels; periodic eval
-  reports on agent–human agreement rates.
-- Memory: incident postmortems summarized and exposed to the triage agent as
-  precedent ("we saw this supplier fail before").
+- `sentinel daemon` (`sentinel/ops.py`): the always-on ingest → pipeline →
+  sleep loop. All state lives in SQLite, so the daemon is crash- and
+  restart-safe by construction; ingest failures are isolated per source and
+  never stop the pipeline; every cycle is audited.
+- Outcome feedback: human approve/reject decisions become labels;
+  `sentinel agreement` / `GET /ops/agreement` reports agent–human agreement
+  rates sliced by action kind and compliance verdict — falling agreement is
+  the earliest drift signal.
+- Institutional memory: before triage, the orchestrator gathers precedent
+  (prior incidents of the same type or involving the same suppliers) and
+  hands it to the triage agent. Repeat offenders score higher; pure noise is
+  never escalated by precedent alone.
 
-**Acceptance:** a daemon run survives restarts (state in SQLite); agreement
-metrics queryable via the API.
+**Acceptance (met):** daemon restart-test proves no reprocessing across
+"process" boundaries; agreement metrics queryable via the API; precedent
+raises repeat-event scores in tests without escalating noise.
 
 ---
 

@@ -100,11 +100,35 @@ class Pipeline:
 
     # --------------------------------------------------------- per-signal
 
+    def _gather_precedent(self, signal: dict) -> dict:
+        """Institutional memory: prior incidents of the same type or involving
+        the same suppliers, surfaced to the triage agent as precedent."""
+        same_type = self.conn.execute(
+            "SELECT COUNT(*) AS n FROM incidents i JOIN signals s ON s.event_id = i.event_id"
+            " WHERE s.type = ?", (signal["type"],)).fetchone()["n"]
+
+        supplier_hits = []
+        names = signal["suppliers_mentioned"]
+        if isinstance(names, str):
+            names = json.loads(names)
+        for name in names:
+            row = self.conn.execute(
+                "SELECT COUNT(*) AS n FROM incidents i JOIN signals s ON s.event_id = i.event_id"
+                " WHERE s.suppliers_mentioned LIKE ?", (f"%{name}%",)).fetchone()
+            if row["n"]:
+                supplier_hits.append({"supplier": name, "prior_incidents": row["n"]})
+
+        return {
+            "prior_incidents_same_type": same_type,
+            "prior_incidents_same_suppliers": supplier_hits,
+        }
+
     def _process_signal(self, signal: dict) -> str:
         run_id, conn = self.run_id, self.conn
         log("pipeline", "signal", run_id=run_id, event_id=signal["event_id"], type=signal["type"])
 
-        triage = self.triage.run({"signal": signal}, self.ctx)
+        precedent = self._gather_precedent(signal)
+        triage = self.triage.run({"signal": signal, "precedent": precedent}, self.ctx)
         audit(conn, run_id, self.triage.name, "triage_completed",
               {"event_id": signal["event_id"], "result": triage})
 
