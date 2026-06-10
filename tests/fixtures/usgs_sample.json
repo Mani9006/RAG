@@ -1,0 +1,42 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {"generated": 1781149200000, "title": "USGS Earthquakes, sample fixture"},
+  "features": [
+    {
+      "type": "Feature",
+      "id": "us7000qxyz",
+      "properties": {
+        "mag": 6.8,
+        "place": "22 km SSE of Hsinchu, Taiwan",
+        "time": 1781132400000,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qxyz",
+        "type": "earthquake"
+      },
+      "geometry": {"type": "Point", "coordinates": [121.2, 24.6, 12.0]}
+    },
+    {
+      "type": "Feature",
+      "id": "us7000qaaa",
+      "properties": {
+        "mag": 6.0,
+        "place": "central Mid-Pacific Ridge",
+        "time": 1781125200000,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qaaa",
+        "type": "earthquake"
+      },
+      "geometry": {"type": "Point", "coordinates": [-150.0, 2.0, 10.0]}
+    },
+    {
+      "type": "Feature",
+      "id": "us7000qbbb",
+      "properties": {
+        "mag": 5.6,
+        "place": "12 km NE of Hamburg, Germany",
+        "time": 1781118000000,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qbbb",
+        "type": "earthquake"
+      },
+      "geometry": {"type": "Point", "coordinates": [10.1, 53.6, 8.0]}
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+# Coordinated industrial action across the northern-European port corridor.
+name: europe-port-strike
+description: >
+  Rolling dockworker strikes shut Gdansk and Hamburg. Suppliers exporting
+  through those ports cannot ship; production continues but goods cannot move,
+  which propagates the same way as a production outage of equal length.
+select:
+  ports: [Gdansk, Hamburg]
+outage_days: {min: 3, mode: 10, max: 30}
+alt_lead_multiplier: {min: 0.9, mode: 1.0, max: 1.3}
+demand_multiplier: {min: 0.95, mode: 1.0, max: 1.05}

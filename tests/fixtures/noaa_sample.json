@@ -1,0 +1,50 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.sample-hurricane",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-118.5, 33.5], [-118.0, 33.5], [-118.0, 34.0], [-118.5, 34.0], [-118.5, 33.5]]]
+      },
+      "properties": {
+        "id": "urn:oid:2.49.0.1.840.0.sample-hurricane",
+        "event": "Hurricane Warning",
+        "severity": "Extreme",
+        "sent": "2026-06-09T18:00:00-07:00",
+        "headline": "Hurricane Warning issued for the Los Angeles / Long Beach coastal zone",
+        "description": "Hurricane conditions expected within 36 hours. Port operations at Long Beach are expected to suspend. Prepare for sustained winds above 75 mph and coastal flooding.",
+        "areaDesc": "Los Angeles County Coast; Long Beach Harbor"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.sample-thunder",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "id": "urn:oid:2.49.0.1.840.0.sample-thunder",
+        "event": "Severe Thunderstorm Warning",
+        "severity": "Severe",
+        "sent": "2026-06-09T19:00:00-05:00",
+        "headline": "Severe Thunderstorm Warning for Travis County",
+        "description": "Quarter size hail and 60 mph wind gusts possible.",
+        "areaDesc": "Travis County, TX"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.sample-flood",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "id": "urn:oid:2.49.0.1.840.0.sample-flood",
+        "event": "Flood Warning",
+        "severity": "Severe",
+        "sent": "2026-06-09T20:00:00-04:00",
+        "headline": "Flood Warning for the Neuse River near Raleigh",
+        "description": "River flooding expected. Low-lying industrial areas may be inundated.",
+        "areaDesc": "Wake County, NC"
+      }
+    }
+  ]
+}

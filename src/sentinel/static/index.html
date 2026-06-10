@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentinel SCM — Command Center</title>
+<style>
+  :root{
+    --bg:#10141a; --panel:#171d26; --panel2:#1d2530; --line:#2a3442;
+    --text:#d6dde6; --dim:#7d8a99; --amber:#e8a33d; --teal:#3dc9b0;
+    --red:#e05d5d; --green:#5dbb7a; --yellow:#d9c04a;
+    font-size:15px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Iowan Old Style',Georgia,'Times New Roman',serif;min-height:100vh}
+  code,.mono,td.num,.pill,button,.tabs{font-family:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace}
+  header{display:flex;align-items:baseline;gap:1rem;padding:1.1rem 1.6rem;border-bottom:1px solid var(--line)}
+  header h1{font-size:1.25rem;font-weight:600;letter-spacing:.04em}
+  header h1 b{color:var(--amber)}
+  header .sub{color:var(--dim);font-style:italic}
+  header .right{margin-left:auto;display:flex;gap:.6rem;align-items:center}
+  .pill{font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:.2rem .7rem;color:var(--dim)}
+  .pill.ok{color:var(--teal);border-color:var(--teal)}
+  .tabs{display:flex;gap:.25rem;padding:.6rem 1.6rem 0;border-bottom:1px solid var(--line)}
+  .tabs button{background:none;border:1px solid transparent;border-bottom:none;color:var(--dim);
+    padding:.5rem .9rem;cursor:pointer;font-size:.8rem;border-radius:.4rem .4rem 0 0}
+  .tabs button.active{color:var(--amber);border-color:var(--line);background:var(--panel)}
+  main{padding:1.2rem 1.6rem;max-width:1280px;margin:0 auto}
+  section{display:none}section.active{display:block}
+  .grid{display:grid;gap:1rem}.grid.two{grid-template-columns:1fr 1fr}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:.55rem;padding:1rem 1.1rem;margin-bottom:1rem}
+  .card h2{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+    font-family:ui-monospace,Menlo,monospace;margin-bottom:.8rem}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{color:var(--dim);text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.08em;
+     text-transform:uppercase;padding:.35rem .5rem;border-bottom:1px solid var(--line);
+     font-family:ui-monospace,Menlo,monospace}
+  td{padding:.42rem .5rem;border-bottom:1px solid #202938;vertical-align:top}
+  td.num{text-align:right;white-space:nowrap}
+  tr.click{cursor:pointer} tr.click:hover td{background:var(--panel2)}
+  .sev{font-family:ui-monospace,Menlo,monospace;font-size:.72rem;padding:.1rem .5rem;border-radius:.3rem}
+  .sev.critical{background:#3a1d1d;color:var(--red)} .sev.high{background:#3a2d18;color:var(--amber)}
+  .sev.medium{background:#36331c;color:var(--yellow)} .sev.low{background:#1d2b22;color:var(--green)}
+  .status-new{color:var(--amber)} .status-incident{color:var(--red)}
+  .status-monitoring{color:var(--yellow)} .status-dismissed{color:var(--dim)}
+  button.act{background:var(--panel2);border:1px solid var(--line);color:var(--text);
+    padding:.35rem .8rem;border-radius:.35rem;cursor:pointer;font-size:.75rem}
+  button.act:hover{border-color:var(--amber);color:var(--amber)}
+  button.act.green:hover{border-color:var(--green);color:var(--green)}
+  button.act.red:hover{border-color:var(--red);color:var(--red)}
+  button.primary{background:var(--amber);color:#16120a;border:none;font-weight:700}
+  button.primary:hover{filter:brightness(1.1);color:#16120a}
+  .bar-row{display:grid;grid-template-columns:200px 1fr 110px;align-items:center;gap:.6rem;
+    font-size:.8rem;margin:.3rem 0}
+  .bar-track{background:var(--panel2);border-radius:.25rem;height:14px;overflow:hidden}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--amber))}
+  .bar-fill.risk{background:linear-gradient(90deg,var(--amber),var(--red))}
+  pre.brief{white-space:pre-wrap;font-size:.84rem;line-height:1.55;background:var(--panel2);
+    border:1px solid var(--line);border-radius:.45rem;padding:1rem;
+    font-family:ui-monospace,Menlo,monospace}
+  .muted{color:var(--dim);font-size:.83rem;font-style:italic}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1rem}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:.55rem;padding:.9rem 1rem}
+  .kpi .v{font-size:1.7rem;font-weight:700;color:var(--amber)}
+  .kpi .l{color:var(--dim);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    font-family:ui-monospace,Menlo,monospace;margin-top:.2rem}
+  .toast{position:fixed;bottom:1.2rem;right:1.2rem;background:var(--panel2);
+    border:1px solid var(--teal);color:var(--text);padding:.7rem 1rem;border-radius:.45rem;
+    font-size:.85rem;display:none;max-width:420px}
+  select,input{background:var(--panel2);border:1px solid var(--line);color:var(--text);
+    padding:.35rem .6rem;border-radius:.35rem;font-family:inherit;font-size:.85rem}
+</style>
+</head>
+<body>
+<header>
+  <h1><b>SENTINEL</b> SCM</h1>
+  <span class="sub">supply chain disruption command center</span>
+  <div class="right">
+    <span class="pill" id="backend-pill">backend: …</span>
+    <button class="act primary" id="run-btn">▶ run pipeline</button>
+  </div>
+</header>
+
+<div class="tabs" id="tabs">
+  <button data-tab="overview" class="active">Overview</button>
+  <button data-tab="signals">Signals</button>
+  <button data-tab="incidents">Incidents</button>
+  <button data-tab="approvals">Approvals</button>
+  <button data-tab="scenarios">War Games</button>
+  <button data-tab="audit">Audit</button>
+</div>
+
+<main>
+  <section id="overview" class="active">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid two">
+      <div class="card"><h2>Single Points of Failure</h2><div id="spofs"></div></div>
+      <div class="card"><h2>Supplier Criticality Index</h2><div id="crits"></div></div>
+    </div>
+  </section>
+
+  <section id="signals">
+    <div class="card"><h2>Signal Inbox</h2><div id="signals-table"></div></div>
+  </section>
+
+  <section id="incidents">
+    <div class="card"><h2>Incident Board</h2><div id="incidents-table"></div></div>
+    <div class="card" id="incident-detail" style="display:none">
+      <h2 id="incident-detail-title">Incident</h2>
+      <div id="incident-actions"></div>
+      <pre class="brief" id="incident-brief"></pre>
+    </div>
+  </section>
+
+  <section id="approvals">
+    <div class="card">
+      <h2>Approval Queue</h2>
+      <div style="margin-bottom:.7rem">
+        <label class="muted">approver:&nbsp;</label>
+        <input id="approver" placeholder="you@company.example" size="28">
+      </div>
+      <div id="approvals-table"></div>
+    </div>
+  </section>
+
+  <section id="scenarios">
+    <div class="card">
+      <h2>Monte Carlo War Games</h2>
+      <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:1rem">
+        <select id="scenario-select"></select>
+        <button class="act primary" id="simulate-btn">⚂ simulate</button>
+        <span class="muted" id="sim-status"></span>
+      </div>
+      <div id="sim-result"></div>
+    </div>
+  </section>
+
+  <section id="audit">
+    <div class="card"><h2>Audit Trail (latest 200)</h2><div id="audit-table"></div></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const usd = (v) => v == null ? "—" : "$" + Math.round(v).toLocaleString();
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const api = async (path, opts) => {
+  const res = await fetch(path, opts);
+  if (!res.ok) throw new Error((await res.json().catch(()=>({}))).detail || res.statusText);
+  return res.json();
+};
+const toast = (msg) => {
+  const t = $("toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 4500);
+};
+const table = (cols, rows, rowAttrs) => {
+  if (!rows.length) return '<p class="muted">(none)</p>';
+  const head = cols.map(c => `<th>${esc(c.label)}</th>`).join("");
+  const body = rows.map(r =>
+    `<tr ${rowAttrs ? rowAttrs(r) : ""}>` +
+    cols.map(c => `<td class="${c.num ? "num" : ""}">${c.render ? c.render(r) : esc(r[c.key])}</td>`).join("") +
+    "</tr>").join("");
+  return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+};
+const sev = (s) => `<span class="sev ${esc(s)}">${esc(s)}</span>`;
+const bars = (items, labelKey, valueKey, cls) => {
+  const max = Math.max(...items.map(i => i[valueKey]), 1);
+  return items.map(i => `
+    <div class="bar-row">
+      <span class="mono" style="font-size:.78rem">${esc(i[labelKey])}</span>
+      <div class="bar-track"><div class="bar-fill ${cls||""}" style="width:${(100*i[valueKey]/max).toFixed(1)}%"></div></div>
+      <span class="num mono" style="font-size:.78rem;text-align:right">${typeof i[valueKey]==="number" && i[valueKey] > 1000 ? usd(i[valueKey]) : i[valueKey]}</span>
+    </div>`).join("");
+};
+
+// ---------------------------------------------------------------- loaders
+async function loadOverview() {
+  const [health, network, signals, incidents, approvals] = await Promise.all([
+    api("/health"), api("/network"), api("/signals"), api("/incidents"), api("/approvals")]);
+  $("backend-pill").textContent = "backend: " + health.backend;
+  $("backend-pill").className = "pill ok";
+  $("kpis").innerHTML = `
+    <div class="kpi"><div class="v">${signals.filter(s=>s.status==="new").length}</div><div class="l">new signals</div></div>
+    <div class="kpi"><div class="v">${incidents.length}</div><div class="l">open incidents</div></div>
+    <div class="kpi"><div class="v">${approvals.length}</div><div class="l">pending approvals</div></div>
+    <div class="kpi"><div class="v">${network.single_points_of_failure.length}</div><div class="l">single points of failure</div></div>`;
+  $("spofs").innerHTML = bars(
+    network.single_points_of_failure.map(s => ({label: `${s.part_id} · ${s.supplier_name}`, v: s.monthly_revenue_dependent_usd})),
+    "label", "v", "risk");
+  $("crits").innerHTML = bars(
+    network.critical_suppliers.map(s => ({label: s.name, v: s.criticality_score})),
+    "label", "v");
+}
+
+async function loadSignals() {
+  const rows = await api("/signals");
+  $("signals-table").innerHTML = table([
+    {label:"event", key:"event_id"},
+    {label:"type", key:"type"},
+    {label:"hint", render: r => sev(r.severity_hint)},
+    {label:"status", render: r => `<span class="mono status-${esc(r.status)}">${esc(r.status)}</span>`},
+    {label:"headline", key:"headline"},
+  ], rows);
+}
+
+async function loadIncidents() {
+  const rows = await api("/incidents");
+  $("incidents-table").innerHTML = table([
+    {label:"incident", key:"incident_id"},
+    {label:"event", key:"event_id"},
+    {label:"severity", render: r => sev(r.severity)},
+    {label:"risk", key:"risk_score", num:true},
+    {label:"summary", key:"summary"},
+  ], rows, r => `class="click" onclick="showIncident('${esc(r.incident_id)}')"`);
+}
+
+async function showIncident(id) {
+  const inc = await api("/incidents/" + id);
+  $("incident-detail").style.display = "block";
+  $("incident-detail-title").textContent = `${inc.incident_id} — actions & briefing`;
+  $("incident-actions").innerHTML = table([
+    {label:"action", key:"action_id"},
+    {label:"kind", key:"kind"},
+    {label:"value", render: r => usd(r.value_usd), num:true},
+    {label:"compliance", key:"compliance_verdict"},
+    {label:"status", key:"status"},
+    {label:"description", key:"description"},
+  ], inc.actions);
+  $("incident-brief").textContent = inc.briefing_md;
+  $("incident-detail").scrollIntoView({behavior:"smooth"});
+}
+
+async function loadApprovals() {
+  const rows = await api("/approvals");
+  $("approvals-table").innerHTML = table([
+    {label:"action", key:"action_id"},
+    {label:"incident", key:"incident_id"},
+    {label:"kind", key:"kind"},
+    {label:"value", render: r => usd(r.value_usd), num:true},
+    {label:"description", key:"description"},
+    {label:"", render: r => `
+      <button class="act green" onclick="decide('${esc(r.action_id)}', true)">approve</button>
+      <button class="act red" onclick="decide('${esc(r.action_id)}', false)">reject</button>`},
+  ], rows);
+}
+
+async function decide(actionId, approve) {
+  const approver = $("approver").value.trim();
+  if (!approver) { toast("Enter an approver identity first."); return; }
+  try {
+    await api("/approvals/" + actionId, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({approve, approver})});
+    toast(`${actionId} ${approve ? "approved" : "rejected"} by ${approver}`);
+    loadApprovals(); loadOverview();
+  } catch (e) { toast("Error: " + e.message); }
+}
+
+async function loadScenarios() {
+  const list = await api("/scenarios");
+  $("scenario-select").innerHTML = list.map(s =>
+    `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("");
+}
+
+async function runSimulation() {
+  const name = $("scenario-select").value;
+  $("sim-status").textContent = "running 2000 trials…";
+  try {
+    const r = await api(`/simulate?scenario=${encodeURIComponent(name)}`, {method:"POST"});
+    $("sim-status").textContent = "";
+    const L = r.loss_usd, P = r.probability_loss_exceeds;
+    $("sim-result").innerHTML = `
+      <div class="kpis">
+        <div class="kpi"><div class="v">${usd(L.p50)}</div><div class="l">P50 loss</div></div>
+        <div class="kpi"><div class="v">${usd(L.p90)}</div><div class="l">P90 loss</div></div>
+        <div class="kpi"><div class="v">${usd(L.max)}</div><div class="l">worst case</div></div>
+        <div class="kpi"><div class="v">${(P["10m_usd"]*100).toFixed(1)}%</div><div class="l">P(loss &gt; $10M)</div></div>
+      </div>
+      <div class="card"><h2>Most exposed products (expected loss)</h2>
+        ${bars(r.top_products_by_expected_loss.map(p=>({label:p.name, v:p.expected_loss_usd})), "label", "v", "risk")}
+      </div>
+      <p class="muted">${esc(r.description)} — ${r.trials} seeded trials over suppliers ${esc(r.suppliers_affected.join(", "))}.</p>`;
+  } catch (e) { $("sim-status").textContent = ""; toast("Error: " + e.message); }
+}
+
+async function loadAudit() {
+  const rows = await api("/audit");
+  $("audit-table").innerHTML = table([
+    {label:"#", key:"seq", num:true},
+    {label:"run", key:"run_id"},
+    {label:"actor", key:"actor"},
+    {label:"action", key:"action"},
+    {label:"detail", render: r => `<span class="mono" style="font-size:.72rem">${esc(r.detail_json.slice(0,160))}</span>`},
+  ], rows);
+}
+
+// ------------------------------------------------------------------ shell
+const loaders = {overview: loadOverview, signals: loadSignals, incidents: loadIncidents,
+                 approvals: loadApprovals, scenarios: loadScenarios, audit: loadAudit};
+$("tabs").addEventListener("click", (e) => {
+  const btn = e.target.closest("button"); if (!btn) return;
+  document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("active", b === btn));
+  document.querySelectorAll("main section").forEach(s =>
+    s.classList.toggle("active", s.id === btn.dataset.tab));
+  loaders[btn.dataset.tab]();
+});
+$("run-btn").addEventListener("click", async () => {
+  $("run-btn").disabled = true; $("run-btn").textContent = "running…";
+  try {
+    const r = await api("/runs", {method:"POST"});
+    toast(`Run ${r.run_id}: ${r.signals_processed} signals → ${r.incidents_opened} incidents`);
+    loadOverview();
+  } catch (e) { toast("Error: " + e.message); }
+  $("run-btn").disabled = false; $("run-btn").textContent = "▶ run pipeline";
+});
+$("simulate-btn").addEventListener("click", runSimulation);
+loadOverview();
+</script>
+</body>
+</html>

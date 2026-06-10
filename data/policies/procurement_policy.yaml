@@ -1,0 +1,34 @@
+# Vertex Devices — procurement & risk governance policy.
+# Consumed by the Compliance Guardrail agent. Every proposed mitigation action
+# is checked against these rules before it can reach an approver.
+
+policy_version: "2026.2"
+owner: "VP Supply Chain"
+
+spend_authority:
+  # Maximum action value that may be auto-approved by the platform when the
+  # compliance agent passes it. Anything above ALWAYS requires a human.
+  auto_approve_limit_usd: 25000
+  category_manager_limit_usd: 250000
+  vp_limit_usd: 1000000
+
+sourcing_rules:
+  - id: SR-001
+    rule: "Critical-category parts must have a qualified alternate supplier before any single PO exceeds 500k USD."
+  - id: SR-002
+    rule: "No new spend may be committed to a supplier under insolvency proceedings without CFO sign-off."
+  - id: SR-003
+    rule: "Expedited air freight is permitted only when projected stockout is within 21 days."
+  - id: SR-004
+    rule: "Alternate suppliers must be ISO9001 certified for critical-category parts."
+
+restricted_entities:
+  # Suppliers the company may not place NEW orders with (existing orders may complete).
+  - supplier_name: "Suzhou MagnetCore"
+    reason: "Pending trade compliance review"
+    since: "2026-03-01"
+
+escalation:
+  critical_severity_sla_hours: 4
+  high_severity_sla_hours: 24
+  notify_roles: ["supply_chain_ops", "category_manager", "vp_supply_chain"]

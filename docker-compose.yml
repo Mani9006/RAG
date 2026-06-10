@@ -1,0 +1,16 @@
+services:
+  sentinel:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      SENTINEL_LLM_BACKEND: ${SENTINEL_LLM_BACKEND:-simulation}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      SENTINEL_MODEL: ${SENTINEL_MODEL:-claude-opus-4-8}
+      SENTINEL_RUN_TOKEN_BUDGET: ${SENTINEL_RUN_TOKEN_BUDGET:-400000}
+      SENTINEL_AUTO_APPROVE_LIMIT_USD: ${SENTINEL_AUTO_APPROVE_LIMIT_USD:-25000}
+    volumes:
+      - sentinel-state:/app/.sentinel
+
+volumes:
+  sentinel-state:

@@ -1,0 +1,121 @@
+part_id,part_number,description,category,primary_supplier_id,alternate_supplier_id,unit_cost_usd,critical,replenish_days
+PART-0001,SOC-01,Application processor v1,SOC,SUP-004,,18.09,yes,53
+PART-0002,SOC-02,Application processor v2,SOC,SUP-012,SUP-016,28.13,yes,37
+PART-0003,SOC-03,Application processor v3,SOC,SUP-022,SUP-002,43.77,yes,32
+PART-0004,SOC-04,Application processor v4,SOC,SUP-011,SUP-024,32.31,yes,33
+PART-0005,SOC-05,Application processor v5,SOC,SUP-004,SUP-006,36.09,yes,52
+PART-0006,SOC-06,Application processor v6,SOC,SUP-001,SUP-006,36.05,yes,18
+PART-0007,SOC-07,Application processor v7,SOC,SUP-003,SUP-040,16.45,yes,47
+PART-0008,SOC-08,Application processor v8,SOC,SUP-004,,42.36,yes,55
+PART-0009,MEM-01,LPDDR5 memory v1,MEM,SUP-024,SUP-029,19.21,yes,11
+PART-0010,MEM-02,LPDDR5 memory v2,MEM,SUP-003,SUP-009,19.04,yes,16
+PART-0011,MEM-03,LPDDR5 memory v3,MEM,SUP-008,SUP-033,20.09,yes,11
+PART-0012,MEM-04,LPDDR5 memory v4,MEM,SUP-027,SUP-015,18.75,yes,33
+PART-0013,MEM-05,LPDDR5 memory v5,MEM,SUP-033,SUP-028,14.34,yes,21
+PART-0014,MEM-06,LPDDR5 memory v6,MEM,SUP-030,,11.7,yes,52
+PART-0015,MEM-07,LPDDR5 memory v7,MEM,SUP-022,,16.12,yes,30
+PART-0016,MEM-08,LPDDR5 memory v8,MEM,SUP-002,SUP-014,18.88,yes,46
+PART-0017,PMIC-01,Power management IC v1,PMIC,SUP-008,SUP-032,1.57,yes,23
+PART-0018,PMIC-02,Power management IC v2,PMIC,SUP-033,,4.75,yes,42
+PART-0019,PMIC-03,Power management IC v3,PMIC,SUP-031,SUP-015,3.42,yes,47
+PART-0020,PMIC-04,Power management IC v4,PMIC,SUP-008,SUP-011,3.57,yes,54
+PART-0021,PMIC-05,Power management IC v5,PMIC,SUP-007,SUP-013,1.89,yes,34
+PART-0022,PMIC-06,Power management IC v6,PMIC,SUP-040,,5.51,yes,36
+PART-0023,PMIC-07,Power management IC v7,PMIC,SUP-023,SUP-016,4.75,yes,47
+PART-0024,PMIC-08,Power management IC v8,PMIC,SUP-032,SUP-038,5.26,yes,56
+PART-0025,DSP-01,Display panel v1,DSP,SUP-018,SUP-032,24.0,yes,20
+PART-0026,DSP-02,Display panel v2,DSP,SUP-020,SUP-003,32.6,yes,31
+PART-0027,DSP-03,Display panel v3,DSP,SUP-013,SUP-031,27.71,yes,21
+PART-0028,DSP-04,Display panel v4,DSP,SUP-030,SUP-001,46.94,yes,47
+PART-0029,DSP-05,Display panel v5,DSP,SUP-014,SUP-030,54.73,yes,60
+PART-0030,DSP-06,Display panel v6,DSP,SUP-017,SUP-006,17.72,yes,46
+PART-0031,DSP-07,Display panel v7,DSP,SUP-028,,57.66,yes,10
+PART-0032,DSP-08,Display panel v8,DSP,SUP-015,SUP-018,17.0,yes,53
+PART-0033,BAT-01,Li-ion battery pack v1,BAT,SUP-027,SUP-036,15.46,yes,53
+PART-0034,BAT-02,Li-ion battery pack v2,BAT,SUP-002,SUP-016,10.84,yes,51
+PART-0035,BAT-03,Li-ion battery pack v3,BAT,SUP-034,,4.34,yes,22
+PART-0036,BAT-04,Li-ion battery pack v4,BAT,SUP-032,SUP-006,11.54,yes,16
+PART-0037,BAT-05,Li-ion battery pack v5,BAT,SUP-002,SUP-016,8.5,yes,51
+PART-0038,BAT-06,Li-ion battery pack v6,BAT,SUP-024,SUP-016,15.28,yes,19
+PART-0039,BAT-07,Li-ion battery pack v7,BAT,SUP-008,,16.12,yes,17
+PART-0040,BAT-08,Li-ion battery pack v8,BAT,SUP-034,SUP-039,11.1,yes,25
+PART-0041,CAM-01,Camera module v1,CAM,SUP-009,SUP-011,19.0,no,33
+PART-0042,CAM-02,Camera module v2,CAM,SUP-034,SUP-039,20.9,no,31
+PART-0043,CAM-03,Camera module v3,CAM,SUP-002,SUP-007,6.94,no,17
+PART-0044,CAM-04,Camera module v4,CAM,SUP-014,SUP-008,25.69,no,51
+PART-0045,CAM-05,Camera module v5,CAM,SUP-005,SUP-012,17.91,no,13
+PART-0046,CAM-06,Camera module v6,CAM,SUP-025,SUP-016,24.22,no,11
+PART-0047,CAM-07,Camera module v7,CAM,SUP-014,SUP-033,8.77,no,50
+PART-0048,CAM-08,Camera module v8,CAM,SUP-038,SUP-039,24.65,no,54
+PART-0049,RF-01,RF front-end module v1,RF,SUP-014,SUP-021,6.26,yes,31
+PART-0050,RF-02,RF front-end module v2,RF,SUP-016,SUP-006,3.19,yes,53
+PART-0051,RF-03,RF front-end module v3,RF,SUP-034,SUP-024,5.9,yes,44
+PART-0052,RF-04,RF front-end module v4,RF,SUP-002,SUP-003,3.34,yes,16
+PART-0053,RF-05,RF front-end module v5,RF,SUP-024,SUP-012,2.67,yes,34
+PART-0054,RF-06,RF front-end module v6,RF,SUP-025,SUP-032,8.15,yes,24
+PART-0055,RF-07,RF front-end module v7,RF,SUP-010,SUP-016,7.5,yes,29
+PART-0056,RF-08,RF front-end module v8,RF,SUP-009,SUP-007,4.41,yes,18
+PART-0057,CON-01,Board-to-board connector v1,CON,SUP-024,,1.62,no,60
+PART-0058,CON-02,Board-to-board connector v2,CON,SUP-031,,0.66,no,22
+PART-0059,CON-03,Board-to-board connector v3,CON,SUP-005,,1.17,no,24
+PART-0060,CON-04,Board-to-board connector v4,CON,SUP-030,,0.33,no,16
+PART-0061,CON-05,Board-to-board connector v5,CON,SUP-014,SUP-032,1.42,no,28
+PART-0062,CON-06,Board-to-board connector v6,CON,SUP-016,SUP-038,0.48,no,14
+PART-0063,CON-07,Board-to-board connector v7,CON,SUP-040,SUP-039,1.49,no,41
+PART-0064,CON-08,Board-to-board connector v8,CON,SUP-004,,0.78,no,14
+PART-0065,PCB-01,Main logic board PCB v1,PCB,SUP-015,SUP-037,3.49,no,46
+PART-0066,PCB-02,Main logic board PCB v2,PCB,SUP-031,,6.1,no,41
+PART-0067,PCB-03,Main logic board PCB v3,PCB,SUP-009,SUP-029,7.06,no,19
+PART-0068,PCB-04,Main logic board PCB v4,PCB,SUP-038,,6.68,no,59
+PART-0069,PCB-05,Main logic board PCB v5,PCB,SUP-022,,11.28,no,47
+PART-0070,PCB-06,Main logic board PCB v6,PCB,SUP-001,SUP-029,7.47,no,55
+PART-0071,PCB-07,Main logic board PCB v7,PCB,SUP-036,SUP-026,8.84,no,45
+PART-0072,PCB-08,Main logic board PCB v8,PCB,SUP-006,,5.62,no,31
+PART-0073,ENC-01,Machined enclosure v1,ENC,SUP-037,SUP-036,11.29,no,56
+PART-0074,ENC-02,Machined enclosure v2,ENC,SUP-029,SUP-011,3.33,no,19
+PART-0075,ENC-03,Machined enclosure v3,ENC,SUP-017,SUP-009,3.48,no,10
+PART-0076,ENC-04,Machined enclosure v4,ENC,SUP-011,SUP-006,11.68,no,54
+PART-0077,ENC-05,Machined enclosure v5,ENC,SUP-008,SUP-032,9.0,no,37
+PART-0078,ENC-06,Machined enclosure v6,ENC,SUP-036,SUP-022,11.35,no,29
+PART-0079,ENC-07,Machined enclosure v7,ENC,SUP-037,SUP-030,5.54,no,58
+PART-0080,ENC-08,Machined enclosure v8,ENC,SUP-014,SUP-001,4.81,no,25
+PART-0081,SEN-01,MEMS sensor v1,SEN,SUP-036,SUP-018,3.77,no,10
+PART-0082,SEN-02,MEMS sensor v2,SEN,SUP-001,SUP-035,2.83,no,24
+PART-0083,SEN-03,MEMS sensor v3,SEN,SUP-024,SUP-036,2.82,no,15
+PART-0084,SEN-04,MEMS sensor v4,SEN,SUP-022,SUP-020,3.94,no,54
+PART-0085,SEN-05,MEMS sensor v5,SEN,SUP-012,SUP-034,2.68,no,27
+PART-0086,SEN-06,MEMS sensor v6,SEN,SUP-036,SUP-028,3.19,no,49
+PART-0087,SEN-07,MEMS sensor v7,SEN,SUP-024,SUP-009,1.9,no,48
+PART-0088,SEN-08,MEMS sensor v8,SEN,SUP-003,SUP-019,2.51,no,11
+PART-0089,ANT-01,Antenna assembly v1,ANT,SUP-007,,0.91,no,52
+PART-0090,ANT-02,Antenna assembly v2,ANT,SUP-014,,1.2,no,45
+PART-0091,ANT-03,Antenna assembly v3,ANT,SUP-028,,2.05,no,34
+PART-0092,ANT-04,Antenna assembly v4,ANT,SUP-039,,1.69,no,12
+PART-0093,ANT-05,Antenna assembly v5,ANT,SUP-016,,1.07,no,60
+PART-0094,ANT-06,Antenna assembly v6,ANT,SUP-032,,1.11,no,44
+PART-0095,ANT-07,Antenna assembly v7,ANT,SUP-003,SUP-036,1.7,no,55
+PART-0096,ANT-08,Antenna assembly v8,ANT,SUP-012,SUP-029,2.0,no,50
+PART-0097,SPK-01,Speaker assembly v1,SPK,SUP-036,,2.69,no,51
+PART-0098,SPK-02,Speaker assembly v2,SPK,SUP-035,,1.97,no,36
+PART-0099,SPK-03,Speaker assembly v3,SPK,SUP-015,SUP-027,1.12,no,34
+PART-0100,SPK-04,Speaker assembly v4,SPK,SUP-007,SUP-032,0.95,no,60
+PART-0101,SPK-05,Speaker assembly v5,SPK,SUP-010,SUP-017,2.19,no,35
+PART-0102,SPK-06,Speaker assembly v6,SPK,SUP-020,,2.86,no,21
+PART-0103,SPK-07,Speaker assembly v7,SPK,SUP-035,SUP-001,1.46,no,18
+PART-0104,SPK-08,Speaker assembly v8,SPK,SUP-033,SUP-028,1.93,no,52
+PART-0105,FLX-01,Flex circuit v1,FLX,SUP-028,SUP-008,1.14,no,26
+PART-0106,FLX-02,Flex circuit v2,FLX,SUP-012,,1.72,no,55
+PART-0107,FLX-03,Flex circuit v3,FLX,SUP-025,SUP-010,0.9,no,14
+PART-0108,FLX-04,Flex circuit v4,FLX,SUP-003,SUP-005,2.31,no,43
+PART-0109,FLX-05,Flex circuit v5,FLX,SUP-019,,1.13,no,35
+PART-0110,FLX-06,Flex circuit v6,FLX,SUP-020,,0.66,no,36
+PART-0111,FLX-07,Flex circuit v7,FLX,SUP-020,SUP-010,1.51,no,35
+PART-0112,FLX-08,Flex circuit v8,FLX,SUP-039,SUP-014,1.27,no,29
+PART-0113,PAS-01,Passive component kit v1,PAS,SUP-006,SUP-001,0.15,no,15
+PART-0114,PAS-02,Passive component kit v2,PAS,SUP-034,SUP-037,0.74,no,48
+PART-0115,PAS-03,Passive component kit v3,PAS,SUP-026,SUP-033,0.47,no,60
+PART-0116,PAS-04,Passive component kit v4,PAS,SUP-006,SUP-025,0.59,no,27
+PART-0117,PAS-05,Passive component kit v5,PAS,SUP-002,SUP-039,0.84,no,21
+PART-0118,PAS-06,Passive component kit v6,PAS,SUP-013,,0.4,no,51
+PART-0119,PAS-07,Passive component kit v7,PAS,SUP-018,,0.48,no,39
+PART-0120,PAS-08,Passive component kit v8,PAS,SUP-035,SUP-030,0.59,no,51

@@ -1,0 +1,41 @@
+supplier_id,name,country,region,city,lat,lon,primary_port,tier_class,on_time_rate,avg_lead_time_days,annual_spend_musd,geo_risk,iso9001
+SUP-001,Hsinchu Microfab,Taiwan,APAC,Hsinchu,24.8,120.97,Shanghai,preferred,0.917,75,0.7,medium,no
+SUP-002,Shenzhen BrightCircuit,China,APAC,Shenzhen,22.54,114.06,Port Klang,preferred,0.841,16,7.8,low,no
+SUP-003,Hanoi Polymer Works,Vietnam,APAC,Hanoi,21.03,105.85,Chennai,approved,0.914,38,5.8,medium,yes
+SUP-004,Penang Optics,Malaysia,APAC,Penang,5.42,100.33,Manzanillo,approved,0.976,37,4.0,low,yes
+SUP-005,Osaka Precision Components,Japan,APAC,Osaka,34.69,135.5,Kaohsiung,preferred,0.861,69,5.7,low,yes
+SUP-006,Busan Cell Systems,South Korea,APAC,Busan,35.18,129.08,Hamburg,preferred,0.887,60,8.8,low,yes
+SUP-007,Dresden Wafertech,Germany,EMEA,Dresden,51.05,13.74,Santos,preferred,0.908,24,3.5,low,no
+SUP-008,Krakow Connectors,Poland,EMEA,Krakow,50.06,19.94,Hamburg,strategic,0.842,57,8.3,low,yes
+SUP-009,Brno Enclosures,Czechia,EMEA,Brno,49.2,16.61,Hai Phong,approved,0.906,74,1.7,medium,yes
+SUP-010,Austin Boardworks,United States,AMER,Austin,30.27,-97.74,Laem Chabang,preferred,0.909,16,6.6,low,no
+SUP-011,Monterrey Harness Co,Mexico,AMER,Monterrey,25.69,-100.32,Hamburg,preferred,0.871,36,3.3,low,yes
+SUP-012,Curitiba Castings,Brazil,AMER,Curitiba,-25.43,-49.27,Busan,strategic,0.839,61,1.3,medium,yes
+SUP-013,Chennai Passives,India,APAC,Chennai,13.08,80.27,Hai Phong,approved,0.838,54,9.5,high,yes
+SUP-014,Bangkok Display Group,Thailand,APAC,Bangkok,13.76,100.5,Hamburg,approved,0.962,26,6.9,low,yes
+SUP-015,Taoyuan Sensor Labs,Taiwan,APAC,Taoyuan,24.99,121.3,Hamburg,preferred,0.961,14,4.9,low,yes
+SUP-016,Suzhou MagnetCore,China,APAC,Suzhou,31.3,120.59,Hamburg,approved,0.902,21,6.6,high,yes
+SUP-017,Da Nang Battery Pack,Vietnam,APAC,Da Nang,16.05,108.21,Port Klang,strategic,0.972,52,1.8,low,yes
+SUP-018,Kulim Substrates,Malaysia,APAC,Kulim,5.37,100.56,Long Beach,preferred,0.956,62,7.2,low,yes
+SUP-019,Nagoya Crystal,Japan,APAC,Nagoya,35.18,136.91,Santos,strategic,0.842,49,7.4,medium,yes
+SUP-020,Gumi PowerCells,South Korea,APAC,Gumi,36.12,128.34,Shanghai,preferred,0.886,56,3.9,low,yes
+SUP-021,Leipzig Coatings,Germany,EMEA,Leipzig,51.34,12.37,Chennai,approved,0.835,18,4.7,low,yes
+SUP-022,Gdansk PCB House,Poland,EMEA,Gdansk,54.35,18.65,Long Beach,approved,0.967,18,4.5,low,yes
+SUP-023,Ostrava Metals,Czechia,EMEA,Ostrava,49.82,18.26,Long Beach,approved,0.855,53,6.3,low,yes
+SUP-024,Phoenix Silicon Foundry,United States,AMER,Phoenix,33.45,-112.07,Kaohsiung,approved,0.861,43,9.1,medium,yes
+SUP-025,Tijuana Assembly Partners,Mexico,AMER,Tijuana,32.51,-117.04,Kaohsiung,preferred,0.969,45,1.0,low,no
+SUP-026,Sao Paulo Resins,Brazil,AMER,Sao Paulo,-23.55,-46.63,Laem Chabang,strategic,0.938,60,4.9,low,yes
+SUP-027,Pune Relays,India,APAC,Pune,18.52,73.86,Shanghai,approved,0.902,46,7.7,low,yes
+SUP-028,Rayong Mouldings,Thailand,APAC,Rayong,12.68,101.28,Laem Chabang,preferred,0.863,61,9.1,high,no
+SUP-029,Kaohsiung Camera Modules,Taiwan,APAC,Kaohsiung,22.62,120.31,Shanghai,preferred,0.82,60,4.4,high,yes
+SUP-030,Dongguan Speakers,China,APAC,Dongguan,23.02,113.75,Busan,strategic,0.846,17,8.5,medium,yes
+SUP-031,Hai Phong Antennas,Vietnam,APAC,Hai Phong,20.86,106.68,Hamburg,preferred,0.824,26,4.4,low,yes
+SUP-032,Johor Flex Circuits,Malaysia,APAC,Johor,1.49,103.74,Laem Chabang,strategic,0.913,37,3.9,high,yes
+SUP-033,Kyoto MEMS Works,Japan,APAC,Kyoto,35.01,135.77,Shanghai,preferred,0.863,29,6.6,medium,yes
+SUP-034,Daejeon RF Labs,South Korea,APAC,Daejeon,36.35,127.38,Gdansk,strategic,0.969,48,2.5,medium,yes
+SUP-035,Stuttgart Fasteners,Germany,EMEA,Stuttgart,48.78,9.18,Long Beach,approved,0.921,31,4.4,low,yes
+SUP-036,Wroclaw Cables,Poland,EMEA,Wroclaw,51.11,17.04,Hai Phong,preferred,0.842,46,1.7,low,yes
+SUP-037,Plzen Gaskets,Czechia,EMEA,Plzen,49.74,13.38,Busan,preferred,0.868,14,5.1,low,yes
+SUP-038,Raleigh Firmware Modules,United States,AMER,Raleigh,35.78,-78.64,Gdansk,strategic,0.956,65,6.2,medium,yes
+SUP-039,Guadalajara Touch Panels,Mexico,AMER,Guadalajara,20.66,-103.35,Long Beach,approved,0.928,31,3.0,low,yes
+SUP-040,Recife Adhesives,Brazil,AMER,Recife,-8.05,-34.88,Port Klang,preferred,0.866,56,3.0,medium,no
