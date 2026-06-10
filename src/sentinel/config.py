@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     # Governance
     auto_approve_limit_usd: float = 25_000.0
 
+    # Notification fabric: Slack-compatible incoming-webhook URL. Empty = disabled.
+    webhook_url: str = ""
+    notify_min_severity: str = "high"  # "critical" | "high" | "medium" | "low"
+
     # Paths
     data_dir: Path = REPO_ROOT / "data"
     state_dir: Path = REPO_ROOT / ".sentinel"

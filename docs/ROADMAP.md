@@ -79,18 +79,24 @@ The credibility phase: prove the agents are good, continuously.
 **Acceptance (met):** `make eval` produces a scorecard; CI blocks on score
 drops; a deliberately degraded agent fails the gates in the test suite.
 
-## Phase 5 — Command center UI & notification fabric
+## ✅ Phase 5 — Command center UI & notification fabric (shipped)
 
 Where operators live.
 
-- Web dashboard (served by the existing FastAPI app): signal inbox, incident
-  board with blast-radius visualization of the supplier graph, approval queue
-  with one-click decisions, audit explorer.
-- Notification adapters: webhook-out (Slack-compatible) for critical-severity
-  incidents and SLA breaches from the policy's escalation rules.
+- Web dashboard at `GET /` (single self-contained HTML file served by the
+  existing FastAPI app — no build step, no CDNs, works fully offline):
+  overview KPIs with SPOF/criticality visualizations, signal inbox, incident
+  board with drill-down briefings, one-click approve/reject queue, Monte
+  Carlo war-game runner, audit explorer, and a run-pipeline button.
+- Notification fabric (`sentinel/notify.py`): Slack-compatible webhook-out
+  for incidents at/above `SENTINEL_NOTIFY_MIN_SEVERITY`, carrying severity,
+  revenue at risk, and pending-approval count. Best-effort by design —
+  delivery failures are logged and audited but never block the pipeline.
 
-**Acceptance:** dashboard runs from the same zero-dependency stack; UI smoke
-tests in CI.
+**Acceptance (met):** dashboard runs from the same zero-dependency stack; UI
+smoke tests assert it is served, self-contained, and wired to the live API;
+notifier tests cover the severity floor, payload shape, failure isolation,
+and the audit trail.
 
 ## Phase 6 — Continuous operations & learning loop
 

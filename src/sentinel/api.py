@@ -7,8 +7,10 @@ from __future__ import annotations
 
 import json
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 from sentinel import __version__
@@ -36,6 +38,11 @@ app = FastAPI(
 class DecisionRequest(BaseModel):
     approve: bool
     approver: str
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def command_center() -> str:
+    return (Path(__file__).parent / "static" / "index.html").read_text()
 
 
 @app.get("/health")

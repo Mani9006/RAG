@@ -156,6 +156,18 @@ class Pipeline:
         conn.commit()
         audit(conn, run_id, "orchestrator", "incident_opened",
               {"incident_id": incident_id, "event_id": signal["event_id"]})
+
+        from sentinel.notify import notify_incident
+
+        pending = conn.execute(
+            "SELECT COUNT(*) AS n FROM actions WHERE incident_id = ?"
+            " AND status = 'pending_approval'", (incident_id,)).fetchone()["n"]
+        if notify_incident(
+            incident_id, triage["severity"], signal["headline"],
+            impact.get("total_monthly_revenue_at_risk_usd"), pending,
+        ):
+            audit(conn, run_id, "notifier", "notification_sent",
+                  {"incident_id": incident_id})
         return "incident"
 
     # ------------------------------------------------------ approval gate

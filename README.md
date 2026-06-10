@@ -87,13 +87,19 @@ sentinel simulate --scenario taiwan-strait   # Monte Carlo loss distribution
 sentinel eval                           # agent quality scorecard + regression gates
 ```
 
-Or run the control-plane API:
+Or run the **command center** (dashboard + API):
 
 ```bash
-sentinel serve                          # → http://localhost:8000/docs
+sentinel serve            # dashboard → http://localhost:8000  ·  API docs → /docs
 # docker alternative:
 docker compose up --build
 ```
+
+The dashboard is a single self-contained HTML file (no build step, no CDNs):
+overview KPIs with SPOF/criticality charts, signal inbox, incident board with
+drill-down briefings, one-click approvals, a Monte Carlo war-game runner, and
+the audit explorer. Set `SENTINEL_WEBHOOK_URL` to push high/critical incidents
+to any Slack-compatible webhook.
 
 ## Live mode (real Claude agents)
 

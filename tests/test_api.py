@@ -62,3 +62,30 @@ def test_run_then_inspect_incident_and_approve(client):
 
 def test_unknown_incident_404(client):
     assert client.get("/incidents/INC-NOPE").status_code == 404
+
+
+def test_command_center_dashboard_served(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.text
+    assert "SENTINEL" in html
+    # The dashboard drives the same API surface this suite tests.
+    for endpoint in ("/signals", "/incidents", "/approvals", "/network", "/simulate"):
+        assert endpoint in html
+    # Self-contained: no external CDNs, fonts, or trackers.
+    assert "http://" not in html.replace("http://localhost", "")
+    assert "cdn." not in html and "googleapis" not in html
+
+
+def test_network_and_scenario_endpoints(client):
+    network = client.get("/network").json()
+    assert network["single_points_of_failure"]
+    assert network["critical_suppliers"]
+
+    scenarios = client.get("/scenarios").json()
+    names = {s["name"] for s in scenarios}
+    assert "taiwan-strait" in names
+
+    sim = client.post("/simulate?scenario=taiwan-strait&trials=200").json()
+    assert sim["loss_usd"]["p90"] >= sim["loss_usd"]["p50"]
+    assert client.post("/simulate?scenario=nope").status_code == 404
