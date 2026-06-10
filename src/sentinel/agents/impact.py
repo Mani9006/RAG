@@ -13,7 +13,7 @@ class ImpactAgent(Agent):
     tools = [
         "supplier_exposure", "parts_blast_radius", "shipments_through_port",
         "inventory_position", "find_suppliers", "simulate_supplier_outage",
-        "network_risk_profile",
+        "network_risk_profile", "run_disruption_scenario",
     ]
     system = (
         "You are the Impact Assessment agent for Vertex Devices. Given an escalated "
@@ -33,7 +33,8 @@ class ImpactAgent(Agent):
         '"single_sourced": bool, "critical": bool, "days_of_cover": num|null, '
         '"monthly_revenue_at_risk_usd": num}], "shipments_at_risk": int, '
         '"total_open_po_value_usd": num, "total_monthly_revenue_at_risk_usd": num, '
-        '"min_days_of_cover": num|null, "outage_simulation": object|null, "narrative": str}'
+        '"min_days_of_cover": num|null, "outage_simulation": object|null, '
+        '"loss_distribution": object|null, "narrative": str}'
     )
 
     def build_prompt(self, payload: dict) -> str:
@@ -100,9 +101,11 @@ class ImpactAgent(Agent):
         covers = [p["days_of_cover"] for p in affected_parts if p["days_of_cover"] is not None]
         total_revenue = round(sum(p["monthly_revenue_at_risk_usd"] for p in affected_parts), 2)
 
-        # Supplier-level events get a propagation simulation: 30-day outage on
-        # the most exposed named supplier, bounded by cover and alternates.
+        # Supplier-level events get a propagation simulation (30-day outage on
+        # the most exposed named supplier) plus a Monte Carlo loss distribution
+        # over duration/ramp/demand uncertainty.
         outage_simulation = None
+        loss_distribution = None
         if entities.get("suppliers"):
             most_exposed = max(
                 affected_suppliers, key=lambda s: s["open_po_value_usd"], default=None
@@ -112,6 +115,7 @@ class ImpactAgent(Agent):
                     toolbox, "simulate_supplier_outage",
                     supplier_id=most_exposed["supplier_id"], outage_days=30,
                 )
+                loss_distribution = self._loss_distribution(toolbox, entities["suppliers"])
 
         return {
             "affected_suppliers": affected_suppliers,
@@ -121,6 +125,7 @@ class ImpactAgent(Agent):
             "total_monthly_revenue_at_risk_usd": total_revenue,
             "min_days_of_cover": min(covers) if covers else None,
             "outage_simulation": outage_simulation,
+            "loss_distribution": loss_distribution,
             "narrative": (
                 f"{len(affected_suppliers)} supplier(s) and {len(affected_parts)} part(s) are in "
                 f"the blast radius; {shipments_at_risk} shipment(s) transit affected ports. "
@@ -128,3 +133,25 @@ class ImpactAgent(Agent):
                 "product revenue depends on the affected parts."
             ),
         }
+
+    @staticmethod
+    def _loss_distribution(toolbox: ToolBox, supplier_ids: list[str]) -> dict:
+        """Seeded Monte Carlo loss band for an ad-hoc outage of the named
+        suppliers (duration 14/30/60 days triangular)."""
+        from sentinel.graph import SupplyGraph
+        from sentinel.montecarlo import MonteCarloEngine, ScenarioSpec, Triangular
+
+        graph = SupplyGraph(toolbox.conn)
+        names = [
+            graph.suppliers[sid]["name"] for sid in supplier_ids if sid in graph.suppliers
+        ]
+        spec = ScenarioSpec(
+            name="incident-adhoc",
+            description="Ad-hoc uncertainty band for the incident's named suppliers",
+            outage_days=Triangular(14, 30, 60),
+            supplier_names=names,
+        )
+        result = MonteCarloEngine(graph).run_scenario(spec, trials=400)
+        if "error" in result:
+            return result
+        return {"trials": result["trials"], "seed": result["seed"], **result["loss_usd"]}

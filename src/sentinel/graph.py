@@ -177,21 +177,48 @@ class SupplyGraph:
         """
         if supplier_id not in self.suppliers:
             return {"error": f"unknown supplier: {supplier_id}"}
+        result = self.simulate_multi_outage([supplier_id], outage_days)
+        result["supplier_id"] = supplier_id
+        result["supplier_name"] = self.suppliers[supplier_id]["name"]
+        return result
+
+    def simulate_multi_outage(
+        self,
+        supplier_ids: list[str],
+        outage_days: float,
+        *,
+        alt_lead_multiplier: float = 1.0,
+        demand_multiplier: float = 1.0,
+        relief_overrides: dict[str, float] | None = None,
+    ) -> dict:
+        """Generalized propagation: several suppliers dark simultaneously.
+
+        `alt_lead_multiplier` stretches/compresses alternate-supplier ramp
+        times and `demand_multiplier` scales product demand — the two
+        uncertainty knobs sampled by the Monte Carlo engine.
+        `relief_overrides` caps a part's relief day (e.g. "expedited stock for
+        PART-X lands on day 5"), used to evaluate mitigation options.
+        """
+        affected = set(supplier_ids)
+        relief_overrides = relief_overrides or {}
 
         affected_parts = []
         product_shortage: dict[str, float] = {}
         for node in self.parts.values():
-            if node.primary_supplier_id != supplier_id:
+            if node.primary_supplier_id not in affected:
                 continue
             cover = self.days_of_cover(node)
             if cover is None:
                 continue
-            if node.single_sourced:
+            # An alternate inside the blast radius provides no relief.
+            alt = self.suppliers.get(node.alternate_supplier_id)
+            if node.single_sourced or alt is None or node.alternate_supplier_id in affected:
                 relief_day = float(outage_days)
             else:
-                alt = self.suppliers.get(node.alternate_supplier_id)
-                alt_lead = float(alt["avg_lead_time_days"]) if alt else float(outage_days)
+                alt_lead = float(alt["avg_lead_time_days"]) * alt_lead_multiplier
                 relief_day = min(float(outage_days), alt_lead)
+            if node.part_id in relief_overrides:
+                relief_day = min(relief_day, max(relief_overrides[node.part_id], 0.0))
             shortage_days = round(max(0.0, relief_day - cover), 1)
             affected_parts.append({
                 "part_id": node.part_id,
@@ -213,7 +240,8 @@ class SupplyGraph:
             if product is None:
                 continue
             loss = round(
-                product["unit_price_usd"] * product["monthly_demand_units"] * shortage / 30.0, 2
+                product["unit_price_usd"] * product["monthly_demand_units"]
+                * demand_multiplier * shortage / 30.0, 2
             )
             product_losses.append({
                 "product_id": pid,
@@ -225,8 +253,7 @@ class SupplyGraph:
 
         affected_parts.sort(key=lambda p: p["shortage_days"], reverse=True)
         return {
-            "supplier_id": supplier_id,
-            "supplier_name": self.suppliers[supplier_id]["name"],
+            "supplier_ids": sorted(affected),
             "outage_days": outage_days,
             "parts_affected": len(affected_parts),
             "parts_in_shortage": sum(1 for p in affected_parts if p["shortage_days"] > 0),

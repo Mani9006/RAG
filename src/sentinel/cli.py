@@ -111,6 +111,29 @@ def cmd_network(_args) -> None:
                   "single_points_of_failure"])
 
 
+def cmd_scenarios(_args) -> None:
+    from sentinel.montecarlo import load_scenarios
+
+    rows = [{"name": s.name, "description": s.description.strip().replace("\n", " ")}
+            for s in load_scenarios().values()]
+    _print_table(rows, ["name", "description"])
+
+
+def cmd_simulate(args) -> None:
+    from sentinel.graph import SupplyGraph
+    from sentinel.montecarlo import MonteCarloEngine, load_scenarios
+
+    library = load_scenarios()
+    spec = library.get(args.scenario)
+    if spec is None:
+        print(f"unknown scenario: {args.scenario} (try: {', '.join(sorted(library))})",
+              file=sys.stderr)
+        sys.exit(2)
+    conn = get_connection()
+    engine = MonteCarloEngine(SupplyGraph(conn), seed=args.seed)
+    print(json.dumps(engine.run_scenario(spec, trials=args.trials), indent=2))
+
+
 def cmd_reset(_args) -> None:
     settings = get_settings()
     if settings.db_path.exists():
@@ -160,6 +183,15 @@ def main(argv: list[str] | None = None) -> None:
 
     sub.add_parser("network", help="supply network risk profile (SPOFs, criticality)"
                    ).set_defaults(fn=cmd_network)
+
+    sub.add_parser("scenarios", help="list the Monte Carlo what-if scenario library"
+                   ).set_defaults(fn=cmd_scenarios)
+
+    p = sub.add_parser("simulate", help="run a Monte Carlo what-if scenario")
+    p.add_argument("--scenario", required=True)
+    p.add_argument("--trials", type=int, default=2000)
+    p.add_argument("--seed", type=int, default=90061)
+    p.set_defaults(fn=cmd_simulate)
 
     sub.add_parser("reset", help="rebuild the local store from data/").set_defaults(fn=cmd_reset)
     sub.add_parser("serve", help="start the control-plane API").set_defaults(fn=cmd_serve)

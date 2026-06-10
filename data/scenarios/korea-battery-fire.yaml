@@ -1,0 +1,10 @@
+# Single-site industrial accident at a strategic cell supplier.
+name: korea-battery-fire
+description: >
+  Major fire at Gumi PowerCells with multi-line damage; restoration measured
+  in weeks. Models the EVT-2026-0602 class of event at full severity.
+select:
+  suppliers: [Gumi PowerCells]
+outage_days: {min: 14, mode: 42, max: 90}
+alt_lead_multiplier: {min: 0.9, mode: 1.1, max: 1.6}
+demand_multiplier: {min: 0.95, mode: 1.0, max: 1.05}

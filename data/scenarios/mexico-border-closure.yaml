@@ -1,0 +1,11 @@
+# Near-shoring concentration risk: the AMER leg goes dark.
+name: mexico-border-closure
+description: >
+  Extended US-Mexico border crossing disruption (security incident, customs
+  systems failure, or policy shock). All Mexico-based suppliers unable to
+  deliver northbound.
+select:
+  countries: [Mexico]
+outage_days: {min: 5, mode: 14, max: 45}
+alt_lead_multiplier: {min: 0.9, mode: 1.2, max: 1.8}
+demand_multiplier: {min: 0.95, mode: 1.0, max: 1.1}

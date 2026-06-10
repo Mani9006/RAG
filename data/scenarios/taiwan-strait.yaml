@@ -1,0 +1,12 @@
+# The scenario every electronics supply chain officer war-games first.
+name: taiwan-strait
+description: >
+  Extended disruption of Taiwan-based manufacturing and the Kaohsiung corridor
+  (blockade, conflict, or major seismic event). All Taiwan suppliers dark;
+  shipping via Kaohsiung suspended.
+select:
+  countries: [Taiwan]
+  ports: [Kaohsiung]
+outage_days: {min: 21, mode: 45, max: 120}
+alt_lead_multiplier: {min: 1.0, mode: 1.4, max: 2.5}   # everyone re-sources at once
+demand_multiplier: {min: 0.85, mode: 1.0, max: 1.1}

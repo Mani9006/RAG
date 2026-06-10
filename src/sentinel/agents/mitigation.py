@@ -12,7 +12,7 @@ class MitigationAgent(Agent):
     name = "mitigation_planner"
     tools = [
         "find_alternate_sources", "estimate_expedite_cost", "inventory_position", "get_policy",
-        "simulate_supplier_outage",
+        "simulate_supplier_outage", "run_disruption_scenario",
     ]
     system = (
         "You are the Mitigation Planner agent for Vertex Devices. Given a quantified "
@@ -105,13 +105,43 @@ class MitigationAgent(Agent):
                 "tradeoffs": "Zero cost; accepts residual risk of late detection.",
             })
 
-        # Cheapest meaningful action first is our deterministic ranking proxy.
-        options.sort(key=lambda o: (o["kind"] == "monitor_only", o["value_usd"]))
+        # Rank under uncertainty when the incident names suppliers: paired
+        # Monte Carlo trials score each option by expected loss reduction per
+        # dollar. Otherwise fall back to cheapest-first.
+        supplier_ids = [
+            s["supplier_id"] for s in payload["impact"].get("affected_suppliers", [])
+        ]
+        ranked_under_uncertainty = False
+        if supplier_ids and any(o["kind"] != "monitor_only" for o in options):
+            from sentinel.graph import SupplyGraph
+            from sentinel.montecarlo import MonteCarloEngine, ScenarioSpec, Triangular
+
+            graph = SupplyGraph(toolbox.conn)
+            names = [
+                graph.suppliers[sid]["name"]
+                for sid in supplier_ids if sid in graph.suppliers
+            ]
+            if names:
+                spec = ScenarioSpec(
+                    name="mitigation-ranking",
+                    description="paired-trial option ranking",
+                    outage_days=Triangular(14, 30, 60),
+                    supplier_names=names,
+                )
+                affected = spec.resolve_suppliers(graph)
+                options = MonteCarloEngine(graph).rank_options(
+                    affected, options, spec, trials=200)
+                ranked_under_uncertainty = True
+        if not ranked_under_uncertainty:
+            options.sort(key=lambda o: (o["kind"] == "monitor_only", o["value_usd"]))
+
         return {
             "options": options,
             "recommended_index": 0,
             "rationale": (
                 "Options target single-sourced critical parts with the least inventory cover; "
-                "ranked by cost subject to lead-time fit."
+                + ("ranked by expected loss reduction per dollar over 200 paired Monte Carlo "
+                   "trials." if ranked_under_uncertainty
+                   else "ranked by cost subject to lead-time fit.")
             ),
         }

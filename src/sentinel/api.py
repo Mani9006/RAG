@@ -81,6 +81,29 @@ def network_profile() -> dict:
         conn.close()
 
 
+@app.get("/scenarios")
+def list_scenarios() -> list[dict]:
+    from sentinel.montecarlo import load_scenarios
+
+    return [{"name": s.name, "description": s.description} for s in load_scenarios().values()]
+
+
+@app.post("/simulate")
+def simulate(scenario: str, trials: int = 2000, seed: int = 90061) -> dict:
+    from sentinel.graph import SupplyGraph
+    from sentinel.montecarlo import MonteCarloEngine, load_scenarios
+
+    spec = load_scenarios().get(scenario)
+    if spec is None:
+        raise HTTPException(status_code=404, detail=f"unknown scenario: {scenario}")
+    conn = get_connection()
+    try:
+        engine = MonteCarloEngine(SupplyGraph(conn), seed=seed)
+        return engine.run_scenario(spec, trials=max(100, min(trials, 10000)))
+    finally:
+        conn.close()
+
+
 @app.get("/signals")
 def list_signals() -> list[dict]:
     conn = get_connection()

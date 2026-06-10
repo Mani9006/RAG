@@ -37,19 +37,27 @@ upgrade impact analysis from queries to graph analytics.
 network; graph metrics are unit-tested against hand-computed values; ingested
 live events flow through the *unchanged* pipeline.
 
-## Phase 3 — Probabilistic digital twin & what-if simulation
+## ✅ Phase 3 — Probabilistic digital twin & what-if simulation (shipped)
 
 From point estimates to distributions.
 
-- Monte Carlo simulation over disruption scenarios (duration, severity,
-  alternate-ramp uncertainty) → P50/P90 revenue-at-risk bands per incident.
-- Scenario library ("Taiwan strait closure", "Suez blockage", "tier-2 chemical
-  shortage") runnable on demand: `sentinel simulate --scenario taiwan-strait`.
-- Mitigation options re-ranked by expected loss reduction per dollar under
-  uncertainty, not deterministic cost.
+- Monte Carlo engine (`sentinel/montecarlo.py`) sampling outage duration,
+  alternate-ramp time, and demand (triangular distributions) over the
+  multi-supplier network propagation model → expected / P50 / P90 / P95 / max
+  loss plus exceedance probabilities.
+- Committed scenario library (`data/scenarios/*.yaml`): `taiwan-strait`,
+  `korea-battery-fire`, `europe-port-strike`, `mexico-border-closure`.
+  Run via `sentinel simulate --scenario taiwan-strait`, `GET /scenarios`,
+  `POST /simulate`, or the `run_disruption_scenario` agent tool.
+- Incident briefings carry a Monte Carlo loss band; mitigation options are
+  re-ranked by **expected loss reduction per dollar** using *paired trials*
+  (identical random draws with/without each option, isolating its effect).
+- Multi-supplier outages model correlated failure: an alternate supplier
+  inside the blast radius provides no relief.
 
-**Acceptance:** simulations are seeded/reproducible; tests pin distribution
-quantiles; briefings show uncertainty bands.
+**Acceptance (met):** simulations are seeded and byte-reproducible; tests pin
+quantile ordering, stochastic dominance, and paired-ranking properties;
+briefings show uncertainty bands.
 
 ## Phase 4 — Agent evaluation harness & quality gates
 

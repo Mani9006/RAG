@@ -180,6 +180,18 @@ class ToolBox:
 
             return SupplyGraph(conn).simulate_outage(supplier_id, outage_days)
 
+        def run_disruption_scenario(scenario_name: str, trials: int = 1000) -> dict:
+            from sentinel.graph import SupplyGraph
+            from sentinel.montecarlo import MonteCarloEngine, load_scenarios
+
+            library = load_scenarios()
+            spec = library.get(scenario_name)
+            if spec is None:
+                return {"error": f"unknown scenario: {scenario_name}",
+                        "available": sorted(library)}
+            return MonteCarloEngine(SupplyGraph(conn)).run_scenario(
+                spec, trials=min(max(trials, 100), 5000))
+
         def get_policy() -> dict:
             path = get_settings().data_dir / "policies" / "procurement_policy.yaml"
             return yaml.safe_load(path.read_text())
@@ -253,6 +265,17 @@ class ToolBox:
                      "outage_days": {"type": "integer", "minimum": 1, "maximum": 180}},
                   "required": ["supplier_id", "outage_days"]},
                  simulate_supplier_outage),
+            Tool("run_disruption_scenario",
+                 "Run a seeded Monte Carlo what-if scenario from the scenario library "
+                 "(e.g. 'taiwan-strait', 'korea-battery-fire'). Returns the loss "
+                 "distribution (expected, P50/P90/P95, max), exceedance probabilities, "
+                 "and the most exposed products. Call this to put an incident in "
+                 "worst-case context or compare it against a war-gamed scenario.",
+                 {"type": "object", "properties": {
+                     "scenario_name": {"type": "string"},
+                     "trials": {"type": "integer", "minimum": 100, "maximum": 5000}},
+                  "required": ["scenario_name"]},
+                 run_disruption_scenario),
             Tool("get_policy",
                  "Read the procurement governance policy: spend authority limits, sourcing rules, "
                  "and restricted entities. Compliance checks MUST be grounded in this document.",

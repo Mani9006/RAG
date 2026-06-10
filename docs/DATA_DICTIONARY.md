@@ -66,6 +66,12 @@ Port gazetteer (`kind, name, country, lat, lon`) used together with supplier
 coordinates as the geo-matching footprint for live connectors (USGS / NOAA /
 GDELT). Tests use committed connector fixtures under `tests/fixtures/`.
 
+## scenarios/*.yaml (4 scenarios)
+War-gamed what-if specs for the Monte Carlo digital twin. Each declares a
+supplier selection (`suppliers` / `countries` / `ports` — union applies) and
+triangular distributions for `outage_days`, `alt_lead_multiplier`, and
+`demand_multiplier`. Run via `sentinel simulate --scenario <name>`.
+
 ## policies/procurement_policy.yaml
 Governance consumed by the compliance agent and the approval gate:
 spend-authority tiers, sourcing rules SR-001…SR-004, restricted entities,

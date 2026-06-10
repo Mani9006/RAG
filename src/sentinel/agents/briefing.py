@@ -49,6 +49,13 @@ class BriefingAgent(Agent):
         ]
         if impact["min_days_of_cover"] is not None:
             lines.append(f"- Tightest inventory position: **{impact['min_days_of_cover']} days of cover**")
+        band = impact.get("loss_distribution")
+        if band and "p50" in band:
+            lines.append(
+                f"- Probabilistic loss (Monte Carlo, {band['trials']} trials): "
+                f"P50 **${band['p50']:,.0f}** · P90 **${band['p90']:,.0f}** · "
+                f"worst case ${band['max']:,.0f}"
+            )
         lines += ["", "## Recommended actions"]
         verdict_by_index = {v["option_index"]: v for v in compliance["verdicts"]}
         for i, opt in enumerate(mitigation["options"]):

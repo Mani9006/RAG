@@ -54,6 +54,12 @@ signal inbox ──▶ Risk Triage ──▶ Impact Assessment ──▶ Mitigat
   index, and simulates outage propagation (stockout timelines + revenue loss
   bounded per product, alternate-supplier relief modeled) — exposed to the
   agents as tools and to operators via `sentinel network`.
+- **A probabilistic digital twin.** A seeded Monte Carlo engine turns point
+  estimates into distributions: war-game scenarios like `taiwan-strait`
+  (`sentinel simulate --scenario taiwan-strait`) return expected/P50/P90/P95
+  loss and exceedance probabilities; incident briefings carry uncertainty
+  bands; mitigation options are re-ranked by **expected loss reduction per
+  dollar** using paired trials.
 
 ## Quickstart (60 seconds, no API key)
 
@@ -72,6 +78,8 @@ sentinel approvals                      # actions waiting for a human
 sentinel decide ACT-XXXXXXXX --approve --approver alice@vertex.example
 sentinel network                        # SPOFs + supplier criticality index
 sentinel ingest --source usgs           # pull real-world signals (USGS/NOAA/GDELT)
+sentinel scenarios                      # list the what-if scenario library
+sentinel simulate --scenario taiwan-strait   # Monte Carlo loss distribution
 ```
 
 Or run the control-plane API:
