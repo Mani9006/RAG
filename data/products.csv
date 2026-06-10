@@ -1,0 +1,13 @@
+product_id,name,unit_price_usd,monthly_demand_units
+PRD-100,Vertex Tab 11,329.0,18000
+PRD-110,Vertex Tab 11 Pro,549.0,9000
+PRD-200,Vertex Phone S,449.0,42000
+PRD-210,Vertex Phone S Ultra,899.0,16000
+PRD-300,Vertex Watch 4,249.0,22000
+PRD-310,Vertex Watch 4 LTE,329.0,11000
+PRD-400,Vertex Buds ANC,129.0,55000
+PRD-500,Vertex Home Hub,179.0,13000
+PRD-600,Vertex Edge Gateway,1299.0,2400
+PRD-700,Vertex Fleet Tracker,199.0,8000
+PRD-800,Vertex Med Monitor,1599.0,1500
+PRD-900,Vertex Retail Kiosk,2499.0,900

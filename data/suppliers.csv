@@ -1,0 +1,41 @@
+supplier_id,name,country,region,primary_port,tier_class,on_time_rate,avg_lead_time_days,annual_spend_musd,geo_risk,iso9001
+SUP-001,Hsinchu Microfab,China,APAC,Shanghai,preferred,0.917,75,0.7,medium,no
+SUP-002,Shenzhen BrightCircuit,Vietnam,APAC,Port Klang,preferred,0.841,16,7.8,low,no
+SUP-003,Hanoi Polymer Works,Malaysia,APAC,Chennai,approved,0.914,38,5.8,medium,yes
+SUP-004,Penang Optics,Japan,APAC,Manzanillo,approved,0.976,37,4.0,low,yes
+SUP-005,Osaka Precision Components,South Korea,APAC,Kaohsiung,preferred,0.861,69,5.7,low,yes
+SUP-006,Busan Cell Systems,Germany,EMEA,Hamburg,preferred,0.887,60,8.8,low,yes
+SUP-007,Dresden Wafertech,Poland,EMEA,Santos,preferred,0.908,24,3.5,low,no
+SUP-008,Krakow Connectors,Czechia,EMEA,Hamburg,strategic,0.842,57,8.3,low,yes
+SUP-009,Brno Enclosures,United States,AMER,Hai Phong,approved,0.906,74,1.7,medium,yes
+SUP-010,Austin Boardworks,Mexico,AMER,Laem Chabang,preferred,0.909,16,6.6,low,no
+SUP-011,Monterrey Harness Co,Brazil,AMER,Hamburg,preferred,0.871,36,3.3,low,yes
+SUP-012,Curitiba Castings,India,APAC,Busan,strategic,0.839,61,1.3,medium,yes
+SUP-013,Chennai Passives,Thailand,APAC,Hai Phong,approved,0.838,54,9.5,high,yes
+SUP-014,Bangkok Display Group,Taiwan,APAC,Hamburg,approved,0.962,26,6.9,low,yes
+SUP-015,Taoyuan Sensor Labs,China,APAC,Hamburg,preferred,0.961,14,4.9,low,yes
+SUP-016,Suzhou MagnetCore,Vietnam,APAC,Hamburg,approved,0.902,21,6.6,high,yes
+SUP-017,Da Nang Battery Pack,Malaysia,APAC,Port Klang,strategic,0.972,52,1.8,low,yes
+SUP-018,Kulim Substrates,Japan,APAC,Long Beach,preferred,0.956,62,7.2,low,yes
+SUP-019,Nagoya Crystal,South Korea,APAC,Santos,strategic,0.842,49,7.4,medium,yes
+SUP-020,Gumi PowerCells,Germany,EMEA,Shanghai,preferred,0.886,56,3.9,low,yes
+SUP-021,Leipzig Coatings,Poland,EMEA,Chennai,approved,0.835,18,4.7,low,yes
+SUP-022,Gdansk PCB House,Czechia,EMEA,Long Beach,approved,0.967,18,4.5,low,yes
+SUP-023,Ostrava Metals,United States,AMER,Long Beach,approved,0.855,53,6.3,low,yes
+SUP-024,Phoenix Silicon Foundry,Mexico,AMER,Kaohsiung,approved,0.861,43,9.1,medium,yes
+SUP-025,Tijuana Assembly Partners,Brazil,AMER,Kaohsiung,preferred,0.969,45,1.0,low,no
+SUP-026,Sao Paulo Resins,India,APAC,Laem Chabang,strategic,0.938,60,4.9,low,yes
+SUP-027,Pune Relays,Thailand,APAC,Shanghai,approved,0.902,46,7.7,low,yes
+SUP-028,Rayong Mouldings,Taiwan,APAC,Laem Chabang,preferred,0.863,61,9.1,high,no
+SUP-029,Kaohsiung Camera Modules,China,APAC,Shanghai,preferred,0.82,60,4.4,high,yes
+SUP-030,Dongguan Speakers,Vietnam,APAC,Busan,strategic,0.846,17,8.5,medium,yes
+SUP-031,Hai Phong Antennas,Malaysia,APAC,Hamburg,preferred,0.824,26,4.4,low,yes
+SUP-032,Johor Flex Circuits,Japan,APAC,Laem Chabang,strategic,0.913,37,3.9,high,yes
+SUP-033,Kyoto MEMS Works,South Korea,APAC,Shanghai,preferred,0.863,29,6.6,medium,yes
+SUP-034,Daejeon RF Labs,Germany,EMEA,Gdansk,strategic,0.969,48,2.5,medium,yes
+SUP-035,Stuttgart Fasteners,Poland,EMEA,Long Beach,approved,0.921,31,4.4,low,yes
+SUP-036,Wroclaw Cables,Czechia,EMEA,Hai Phong,preferred,0.842,46,1.7,low,yes
+SUP-037,Plzen Gaskets,United States,AMER,Busan,preferred,0.868,14,5.1,low,yes
+SUP-038,Raleigh Firmware Modules,Mexico,AMER,Gdansk,strategic,0.956,65,6.2,medium,yes
+SUP-039,Guadalajara Touch Panels,Brazil,AMER,Long Beach,approved,0.928,31,3.0,low,yes
+SUP-040,Recife Adhesives,India,APAC,Port Klang,preferred,0.866,56,3.0,medium,no
