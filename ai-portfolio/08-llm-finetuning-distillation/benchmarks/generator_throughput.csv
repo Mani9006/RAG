@@ -1,0 +1,2 @@
+rows,seconds,rows_per_sec,chunk_size
+1000000,43.436,23022.5,100000
