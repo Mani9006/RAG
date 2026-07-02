@@ -1,0 +1,17 @@
+# generated data (lakehouse Parquet) — regenerate with `make data`
+data/*
+!data/.gitkeep
+
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# keep benchmark result CSV/JSON and committed assets
+!benchmarks/*.csv
+!benchmarks/*.json
+!assets/*.png
