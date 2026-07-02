@@ -1,0 +1,11 @@
+# Core stack (offline, no paid APIs). Versions reflect the tested environment;
+# the code targets these major lines.
+numpy>=1.26,<3
+pandas>=2.0
+scikit-learn>=1.3
+duckdb>=0.10
+polars>=0.20
+pyarrow>=14
+scipy>=1.11
+matplotlib>=3.7
+pytest>=7.4
