@@ -1,0 +1,32 @@
+task_id,category,prompt,off_success,off_attempts,off_cost,on_success,on_attempts,on_steps,on_cost,on_tokens
+T01,calc,Evaluate the expression: 12 * (3 + 4) / 2,1,1,0.124,1,1,1,0.124,214
+T02,calc,Evaluate the expression: (100 - 55) / 9,1,1,0.122,1,1,1,0.122,212
+T03,calc,Evaluate the expression: sqrt(144) + 8,1,1,0.122,1,1,1,0.122,212
+T04,calc,"Evaluate the expression: max(3, 9, 5) * 2",1,1,0.124,1,1,1,0.124,214
+T05,calc_pow,Evaluate the expression: 2 ^ 10 + 5,0,1,0.09,1,2,1,0.212,392
+T06,calc_pow,Evaluate the expression: 3 ^ 4 - 1,0,1,0.09,1,2,1,0.21,390
+T07,calc_pow,Evaluate the expression: 10 ^ 3 / 8,0,1,0.09,1,2,1,0.212,392
+T08,convert,Convert 5 km to mi.,1,1,0.132,1,1,1,0.132,222
+T09,convert,Convert 2500 g to kg.,1,1,0.126,1,1,1,0.126,218
+T10,convert,Convert 10 kilometers to miles.,0,1,0.09,1,2,1,0.222,402
+T11,convert,Convert 3 pounds to grams.,0,1,0.09,1,2,1,0.2175,399
+T12,convert,Convert 100 centimeters to meters.,0,1,0.09,1,2,1,0.216,398
+T13,convert,Convert 6 feet to inches.,0,1,0.09,1,2,1,0.2205,401
+T14,convert_calc,"Convert 10 kilometers to miles, then multiply by 3",0,1,0.09,1,2,2,0.2625,441
+T15,convert_calc,"Convert 500 grams to kilograms, then multiply by 4",0,1,0.09,1,2,2,0.2445,427
+T16,percent,What percentage of 8 is 3?,0,1,0.118,1,2,1,0.24,420
+T17,percent,What percentage of 200 is 50?,0,1,0.12,1,2,1,0.244,424
+T18,percent,What percentage of 40 is 9?,0,1,0.118,1,2,1,0.24,420
+T19,corpus,Search the knowledge base: boiling point of water?,1,1,0.3295,1,1,1,0.3295,353
+T20,corpus,Search the knowledge base: speed of light in a vacuum?,1,1,0.3435,1,1,1,0.3435,363
+T21,corpus,Search the knowledge base: acceleration due to gravity on Earth?,1,1,0.345,1,1,1,0.345,366
+T22,corpus,Search the knowledge base: mean radius of the Earth?,1,1,0.3375,1,1,1,0.3375,359
+T23,corpus,Search the knowledge base: speed of sound in air?,1,1,0.346,1,1,1,0.346,364
+T24,corpus_calc,"Search the knowledge base for mean radius of the Earth, then divide by 2",1,1,0.369,1,1,2,0.369,390
+T25,corpus_calc,"Search the knowledge base for days in a calendar year, then divide by 5",1,1,0.34,1,1,2,0.34,370
+T26,code,Review this Python code: ``` def f(x):     return eval(x) ```,0,1,0.09,1,2,1,0.2195,399
+T27,code,Review this Python code: ``` def g(items=[]):     try:         return items[0]  ,0,1,0.09,1,2,1,0.2415,423
+T28,code,Review this Python code: ``` def h(x):     if x == None:         return 0     re,0,1,0.09,1,2,1,0.231,412
+T29,parallel,"Convert 100 centimeters to meters and convert 2 kilograms to pounds, then add th",0,1,0.09,1,2,3,0.299,480
+T30,parallel,"Convert 5 kilometers to meters and convert 3 miles to kilometers, then add the t",0,1,0.09,1,2,3,0.2905,473
+T31,showcase,Convert 12 kilometers to miles and convert 4 kilograms to pounds and search the ,0,1,0.346,1,2,4,0.8255,861

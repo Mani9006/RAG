@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+.DS_Store
+
+# Generated data (kept out of git); assets/ PNGs ARE committed.
+data/*
+!data/.gitkeep
