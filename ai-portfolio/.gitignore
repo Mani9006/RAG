@@ -1,0 +1,24 @@
+# Generated data — regenerable via each project's `make data`
+**/data/*
+!**/data/.gitkeep
+*.parquet
+*.duckdb
+*.db
+*.sqlite
+*.npy
+*.bin
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# OS
+.DS_Store
+
+# Keep generated screenshots (they are deliverables)
+!**/assets/*.png
