@@ -1,0 +1,15 @@
+# generated data (large; reproducible from scripts)
+data/*.parquet
+data/*.json
+!data/.gitkeep
+
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.DS_Store
+
+# NOTE: assets/*.png ARE committed (generated screenshots).
+# NOTE: benchmarks/results.* ARE committed (recorded numbers).
