@@ -1,0 +1,3 @@
+method,target_acc,trainable_params
+full_finetune,0.9335,33417
+lora,0.9335,2889

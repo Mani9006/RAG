@@ -1,0 +1,5 @@
+rows,parquet_gb,cold_ms,warm_median_ms,q_distinct_customers_ms,q_filter_year_month_ms,q_full_scan_sum_ms,q_groupby_region_ms,q_topn_brand_ms,reused_main
+1000000,0.0294,17.1,126.34,143.04,23.87,23.85,126.34,159.94,False
+5000000,0.1341,43.58,426.83,711.19,64.02,48.93,426.83,590.02,False
+20000000,0.5647,130.42,882.89,882.89,111.53,131.28,946.02,1275.86,False
+50000000,1.4157,195.41,1506.71,2307.33,195.99,195.99,1506.71,1990.15,True

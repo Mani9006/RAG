@@ -1,0 +1,16 @@
+{
+  "questions": 26,
+  "valid_sql": 26,
+  "correct": 26,
+  "execution_accuracy": 1.0,
+  "validation_rate": 1.0,
+  "by_category": {
+    "aggregate": 1.0,
+    "distinct_count": 1.0,
+    "ratio": 1.0,
+    "filter": 1.0,
+    "group_by": 1.0,
+    "timeseries": 1.0,
+    "topn": 1.0
+  }
+}

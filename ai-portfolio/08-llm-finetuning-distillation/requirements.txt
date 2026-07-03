@@ -1,0 +1,13 @@
+# Core stack (offline, CPU-only). Versions are lower bounds known to work.
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.8
+scikit-learn>=1.3
+pyarrow>=14.0
+pytest>=7.4
+
+# Present in the shared portfolio environment; unused by the core path but
+# available for the scaling/IO utilities.
+duckdb>=0.9
+polars>=0.20
+scipy>=1.11

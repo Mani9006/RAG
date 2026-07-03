@@ -1,0 +1,12 @@
+{
+  "rows": 50000000,
+  "fact_gb": 1.416,
+  "dim_gb": 0.0283,
+  "total_gb": 1.444,
+  "num_partitions": 3,
+  "num_files": 3,
+  "bytes_per_row": 28.313,
+  "gen_seconds": 45.82,
+  "gen_rows_per_sec": 1091285,
+  "extrapolated_1B_parquet_gb": 28.3
+}

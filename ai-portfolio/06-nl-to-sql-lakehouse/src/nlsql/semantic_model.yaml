@@ -1,0 +1,112 @@
+# Semantic layer for the NL-to-SQL Lakehouse.
+#
+# This maps *business* concepts (metrics, dimensions) onto physical SQL. The
+# NL-to-SQL engine never invents column names -- it only ever references the
+# names declared here, and the join graph below lets it assemble a fact->dim
+# query automatically from a metric + a set of dimensions.
+
+fact:
+  name: fact_sales
+  primary_key: sale_id
+  # order_id groups line-items into a single order/basket.
+
+dimensions_tables:
+  dim_customer:
+    key: customer_key
+    fact_key: customer_key
+  dim_product:
+    key: product_key
+    fact_key: product_key
+  dim_store:
+    key: store_key
+    fact_key: store_key
+  dim_date:
+    key: date_key
+    fact_key: date_key
+
+# Business metrics -> SQL aggregate expressions over the (already joined) tables.
+metrics:
+  revenue:
+    label: Revenue
+    sql: "SUM(fact_sales.net_revenue)"
+    format: currency
+    synonyms: [revenue, sales, total sales, turnover, gmv, net revenue]
+  gross_margin:
+    label: Gross Margin
+    sql: "SUM(fact_sales.net_revenue - fact_sales.cost)"
+    format: currency
+    synonyms: [margin, gross margin, profit, gross profit]
+  quantity:
+    label: Units Sold
+    sql: "SUM(fact_sales.quantity)"
+    format: number
+    synonyms: [units, units sold, quantity, volume, items sold]
+  orders:
+    label: Orders
+    sql: "COUNT(DISTINCT fact_sales.order_id)"
+    format: number
+    synonyms: [orders, number of orders, order count, baskets, transactions]
+  line_items:
+    label: Line Items
+    sql: "COUNT(*)"
+    format: number
+    synonyms: [line items, rows, records]
+  aov:
+    label: Average Order Value
+    sql: "SUM(fact_sales.net_revenue) / COUNT(DISTINCT fact_sales.order_id)"
+    format: currency
+    synonyms: [aov, average order value, avg order value, basket size, average basket]
+  active_customers:
+    label: Active Customers
+    sql: "COUNT(DISTINCT fact_sales.customer_key)"
+    format: number
+    synonyms: [active customers, customers, unique customers, buyers, distinct customers]
+
+# Group-by / filterable dimensions -> physical columns, with the table that
+# owns them (used to resolve joins) and NL synonyms.
+dimensions:
+  customer_segment:
+    label: Customer Segment
+    table: dim_customer
+    sql: "dim_customer.segment"
+    synonyms: [segment, segments, customer segment, customer segments, customer type]
+  customer_country:
+    label: Customer Country
+    table: dim_customer
+    sql: "dim_customer.country"
+    synonyms: [customer country, customer countries, country, countries]
+  product_category:
+    label: Product Category
+    table: dim_product
+    sql: "dim_product.category"
+    synonyms: [category, categories, product category, product categories]
+  product_brand:
+    label: Brand
+    table: dim_product
+    sql: "dim_product.brand"
+    synonyms: [brand, brands, product brand, product brands]
+  store_region:
+    label: Region
+    table: dim_store
+    sql: "dim_store.region"
+    synonyms: [region, regions, store region, store regions, area]
+  store_type:
+    label: Store Type
+    table: dim_store
+    sql: "dim_store.store_type"
+    synonyms: [store type, store types, channel, channels]
+  year:
+    label: Year
+    table: dim_date
+    sql: "dim_date.year"
+    synonyms: [year, years, by year, annually]
+  quarter:
+    label: Quarter
+    table: dim_date
+    sql: "dim_date.quarter"
+    synonyms: [quarter, quarters, by quarter, quarterly]
+  month:
+    label: Month
+    table: dim_date
+    sql: "dim_date.month"
+    synonyms: [month, months, by month, monthly]

@@ -1,0 +1,8 @@
+category,n,correct,accuracy
+aggregate,4,4,1.0
+distinct_count,2,2,1.0
+ratio,2,2,1.0
+filter,5,5,1.0
+group_by,5,5,1.0
+timeseries,4,4,1.0
+topn,4,4,1.0

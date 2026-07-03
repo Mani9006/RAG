@@ -1,0 +1,6 @@
+# Multi-Agent Orchestrator — runtime dependencies.
+# Offline only: no external LLM API is used anywhere.
+numpy>=1.26,<3
+scikit-learn>=1.3,<2
+matplotlib>=3.7,<4
+pytest>=7.4,<9
