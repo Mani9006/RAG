@@ -35,17 +35,18 @@ extrapolate to 1B from measured per-row cost.
 | # | Project | One-liner | Tests | Headline result |
 |---|---------|-----------|:-----:|-----------------|
 | [01](01-enterprise-rag-platform) | **Enterprise RAG Platform** | Hybrid retrieval (BM25 + dense) + reranking + eval harness | 28 | Hybrid+Rerank: Recall@1 **0.92**, nDCG@10 **0.96** |
-| [02](02-billion-scale-vector-search) | **Billion-Scale Vector Search** | IVF-PQ ANN engine from scratch (NumPy) | 22 | recall/latency Pareto; **~7× compression**; 1B memory model |
+| [02](02-billion-scale-vector-search) | **Billion-Scale Vector Search** | IVF-PQ ANN engine from scratch (NumPy) | 22 | recall@10 **0.75–0.92** vs exact; **~7× compression**; 1B = ~67 GiB |
 | [03](03-multi-agent-orchestrator) | **Multi-Agent Orchestrator** | Planner/executor DAG, tools, self-correction | 69 | Self-correction lifts task success **41.9% → 100%** |
 | [04](04-llm-observability-eval) | **LLM Observability & Eval** | Trace analytics + drift + hallucination detection | 21 | **5M traces / 1.79B tokens**; PSI flags injected drift |
-| [05](05-realtime-fraud-detection) | **Real-Time Fraud Detection** | Streaming features + sub-ms online serving | 15 | streaming @ millions of events; sub-25ms p99 serving |
+| [05](05-realtime-fraud-detection) | **Real-Time Fraud Detection** | Streaming features + sub-ms online serving | 15 | **PR-AUC 0.974** (188× baseline); serving **e2e p99 1.19 ms** |
 | [06](06-nl-to-sql-lakehouse) | **NL-to-SQL Lakehouse** | DuckDB star schema + semantic layer + text-to-SQL | 36 | **50M-row** lakehouse; **100%** NL→SQL execution accuracy |
-| [07](07-two-tower-recommender) | **Two-Tower Recommender** | Retrieval + ranking, trained from scratch | 40 | two-tower beats popularity baseline on recall/nDCG |
+| [07](07-two-tower-recommender) | **Two-Tower Recommender** | Retrieval + ranking, trained from scratch | 33 | beats popularity **+76% recall**; ranker **+7.8% nDCG** |
 | [08](08-llm-finetuning-distillation) | **Fine-Tuning & Distillation** | LoRA + knowledge distillation, from scratch | 29 | LoRA **−91% params**; KD recovers **100%** of teacher |
 | [09](09-multimodal-doc-intelligence) | **Document Intelligence** | Layout-aware field + table extraction | 18 | field macro-F1 **0.976**; 100k docs, doc-type **100%** |
 | [10](10-mlops-platform) | **MLOps Platform** | Registry + drift + auto-retrain + promotion gates | 27 | full drift → retrain → A/B → promote lifecycle |
 
-*(02, 05, 07 headline numbers finalized from their latest benchmark runs — see each README.)*
+**298 passing tests across the ten projects**, all offline and seeded. Every
+headline number above is reproduced by that project's `make run` / `make bench`.
 
 ---
 
