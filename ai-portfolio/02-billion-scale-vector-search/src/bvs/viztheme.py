@@ -65,7 +65,7 @@ def kpi(ax, label: str, value: str, sub: str = "", color: str = ACCENT) -> None:
     ax.axis("off")
     ax.set_facecolor(PANEL)
     ax.text(0.5, 0.66, value, ha="center", va="center", fontsize=26, fontweight="bold", color=color)
-    ax.text(0.5, 0.30, label.upper(), ha="center", va="center", fontsize=9, color=MUTED, letterspacing=1)
+    ax.text(0.5, 0.30, label.upper(), ha="center", va="center", fontsize=9, color=MUTED)
     if sub:
         ax.text(0.5, 0.10, sub, ha="center", va="center", fontsize=8, color=MUTED)
 
